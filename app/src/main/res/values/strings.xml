@@ -1,0 +1,64 @@
+<resources>
+    <string name="app_name" translatable="false">MijnWords</string>
+
+    <string name="try_again">Reintentar</string>
+    <string name="no_examples">No hay ejemplos con esta palabra</string>
+
+    <string name="slow_internet">Conexión a internet demasiado lenta</string>
+    <string name="unknow_error">Error desconocido</string>
+    <string name="no_internet_access">No hay conexión a internet</string>
+    <string name="server_off">El servidor no responde</string>
+    <string name="title_error" translatable="false">Ops!</string>
+
+    <string name="credits">Créditos</string>
+    <string name="version" translatable="false">Versión 0.1</string>
+    <string name="icons">Iconos</string>
+    <string name="translations">Traducciones</string>
+    <string name="suggest_translation">Sugerir traducción para…</string>
+    <string name="suggest">Sugerir</string>
+    <string name="cancel">Cancelar</string>
+    <string name="suggest_sent">Sugerencia enviada correctamente!</string>
+    <string name="report_sent">Ejemplo reportado correctamente!</string>
+    <string name="verbs_in">Verbos en</string>
+    <string name="examples_in">Ejemplos en</string>
+    <string name="try_later">Intentelo de nuevo mas tarde</string>
+    <string name="wrong_translation">Traduccion errónea</string>
+    <string name="wrong_translation_description">Se notificará como erróneo este ejemplo</string>
+    <string name="report">Reportar</string>
+    <string name="save">Guardar</string>
+    <string name="config_languages">Configurar idiomas</string>
+    <string name="none">None</string>
+
+    <!--No traducir-->
+
+    <string name="modo_indicativo" translatable="false">Modo indicativo</string>
+    <string name="presente" translatable="false">Presente</string>
+    <string name="preterito_imperfecto" translatable="false">Pretérito imperfecto</string>
+    <string name="preterito_indefinido" translatable="false">Pretérito indefinido</string>
+    <string name="futuro" translatable="false">Futuro</string>
+    <string name="condicional" translatable="false">Condicional</string>
+    <string name="afirmativo" translatable="false">Afirmativo</string>
+    <string name="negativo" translatable="false">Negativo</string>
+
+    <string name="modo_subjuntivo" translatable="false">Modo subjuntivo</string>
+    <string name="modo_condicional" translatable="false">Modo condicional</string>
+    <string name="modo_imperativo" translatable="false">Modo imperativo</string>
+
+    <string name="yo" translatable="false">Yo</string>
+    <string name="tu" translatable="false">Tú</string>
+    <string name="tu_no" translatable="false">Tú no</string>
+    <string name="usted" translatable="false">Usted</string>
+    <string name="usted_no" translatable="false">Usted no</string>
+    <string name="ustedes" translatable="false">Ustedes</string>
+    <string name="ustedes_no" translatable="false">Ustedes no</string>
+    <string name="el" translatable="false">Él, ella, usted</string>
+    <string name="nosotros" translatable="false">Nosotros</string>
+    <string name="nosotros_no" translatable="false">Nosotros no</string>
+    <string name="vosotros" translatable="false">Vosotros</string>
+    <string name="vosotros_no" translatable="false">Vosotros no</string>
+    <string name="ellos" translatable="false">Ellos</string>
+    <string name="search">Buscar</string>
+    <string name="introduce_word">Introduce una palabra</string>
+
+
+</resources>
