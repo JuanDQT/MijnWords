@@ -3,6 +3,8 @@ package com.juandqt.mijnwords;
 import android.animation.ValueAnimator;
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
@@ -11,6 +13,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 
 /**
  * Created by juandaniel on 7/8/17.
@@ -20,12 +23,22 @@ public class Common extends Application {
 
     public static Context context;
     private static final String FILE = "access.json";
+    public static HashMap<String, Integer> allLanguages;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
         this.context = getApplicationContext();
+        allLanguages = instanceMapLanguages();
+    }
+
+    private HashMap<String, Integer> instanceMapLanguages() {
+        HashMap<String, Integer> map = new HashMap<>();
+        map.put("ES", R.drawable.es_lang);
+        map.put("NL", R.drawable.nl_lang);
+        map.put("EN", R.drawable.en_lang);
+        return map;
     }
 
     public static Context getContext() {
@@ -149,5 +162,25 @@ public class Common extends Application {
         }
 
         return url.replace("\n", "").replace("\r", "");
+    }
+
+    public static String getSystemLanguage() {
+        String ln = "";
+        SharedPreferences sharedPreferences = context.getSharedPreferences("SP", Context.MODE_PRIVATE);
+        if (sharedPreferences.contains("LN")) {
+
+            ln = sharedPreferences.getString("LN", "EN");
+            Log.e("SP", "Cargamos:  " + ln);
+
+
+            // cargamos del sh
+        } else {
+
+            ln = "EN";
+            Log.e("SP", "Nada guardado " + ln);
+        }
+
+        return ln;
+
     }
 }

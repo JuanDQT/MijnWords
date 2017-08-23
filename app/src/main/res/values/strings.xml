@@ -28,6 +28,7 @@
     <string name="save">Guardar</string>
     <string name="config_languages">Configurar idiomas</string>
     <string name="none">None</string>
+    <string name="no_language_available">Próximamemnte se anadirán más idiomas</string>
 
     <!--No traducir-->
 
