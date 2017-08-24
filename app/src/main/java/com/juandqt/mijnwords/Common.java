@@ -51,7 +51,21 @@ public class Common extends Application {
         String url = "";
         try {
             JSONObject jsonUrl = new JSONObject(jsonUrlFile);
-            url = jsonUrl.getString("host");
+            url = jsonUrl.getString("host_debug");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return url.replace("\n", "").replace("\r", "");
+    }
+
+    public String getUpdateUrl() {
+
+        String jsonUrlFile = openJSON(FILE);
+        String url = "";
+        try {
+            JSONObject jsonUrl = new JSONObject(jsonUrlFile);
+            url = jsonUrl.getString("update_debug");
         } catch (JSONException e) {
             e.printStackTrace();
         }

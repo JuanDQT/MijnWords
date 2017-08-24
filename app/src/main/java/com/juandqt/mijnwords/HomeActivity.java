@@ -12,7 +12,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -45,6 +44,9 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        // Check if this applications is updated!
+        API.checkIfUpdated(this);
 
         // Leemos
 
@@ -98,24 +100,11 @@ public class HomeActivity extends AppCompatActivity {
                 spBaseLanguage.setAdapter(spAdapterBaseLanguage);
 
                 spBaseLanguage.setEnabled(false);
-                Toast.makeText(HomeActivity.this, "Idioma: " + Common.getSystemLanguage(), Toast.LENGTH_SHORT).show();
 
                 SpinnerLanguageAdapter spAdapterExampleLanguage = new SpinnerLanguageAdapter(HomeActivity.this, new String[]{"EN", "NL"},new int[]{R.drawable.en_lang, R.drawable.nl_lang});
                 spExampleLanguage.setAdapter(spAdapterExampleLanguage);
                 int currentPositionSpinner = spAdapterExampleLanguage.getPosition(Common.getSystemLanguage());
                 spExampleLanguage.setSelection(currentPositionSpinner);
-                spExampleLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        TextView tvLanguage = (TextView) view.findViewById(R.id.tvCountry);
-                        Toast.makeText(HomeActivity.this, "Seleccionado: " +  tvLanguage.getText().toString()  , Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-
-                    }
-                });
 
                 adbLanguages.setView(vLanguages);
                 adbLanguages.setTitle(getResources().getString(R.string.config_languages));

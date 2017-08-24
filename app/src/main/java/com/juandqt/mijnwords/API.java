@@ -69,7 +69,7 @@ class API {
                         handleNewtworkErrors(volleyError, context);
                     }
 
-                }){
+                }) {
                     @Override
                     protected Map<String, String> getParams() throws AuthFailureError {
                         Map<String, String> params = new HashMap<>();
@@ -78,6 +78,7 @@ class API {
                         params.put("content", responseHTML);
                         params.put("lng_base", "ES");
                         params.put("lng_focus", Common.getSystemLanguage());
+                        params.put("app_version", BuildConfig.VERSION_CODE + "");
                         return params;
                     }
                 };
@@ -102,34 +103,39 @@ class API {
     private static void handleNewtworkErrors(VolleyError volleyError, Context context) {
         Intent intent = new Intent("ERROR");
 
-        String message = null;
-        if (volleyError instanceof NetworkError) {
-            message = "Cannot connect to Internet...Please check your connection!";
-            intent.putExtra("RESP", 1);
-            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-        } else if (volleyError instanceof ServerError) {
-            message = "The server could not be found. Please try again after some time!!";
-            intent.putExtra("RESP", 2);
-            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-        } else if (volleyError instanceof AuthFailureError) {
-            intent.putExtra("RESP", 0);
-            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-            message = "Cannot connect to Internet...Please check your connection!";
-        } else if (volleyError instanceof ParseError) {
-            intent.putExtra("RESP", 0);
-            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-            message = "Parsing error! Please try again after some time!!";
-        } else if (volleyError instanceof NoConnectionError) {
-            intent.putExtra("RESP", 0);
-            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-            message = "Cannot connect to Internet...Please check your connection!";
-        } else if (volleyError instanceof TimeoutError) {
-            intent.putExtra("RESP", 3);
-            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-            message = "Connection TimeOut! Please check your internet connection.";
-        }
+        if (volleyError.networkResponse != null) {
+            Toast.makeText(Common.context, "Actualizame[LEVANTAR VIEW] " + volleyError.networkResponse.statusCode, Toast.LENGTH_SHORT).show();
+        } else {
+            String message = null;
+            if (volleyError instanceof NetworkError) {
+                message = "Cannot connect to Internet...Please check your connection!";
+                intent.putExtra("RESP", 1);
+                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+            } else if (volleyError instanceof ServerError) {
+                message = "The server could not be found. Please try again after some time!!";
+                intent.putExtra("RESP", 2);
+                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+            } else if (volleyError instanceof AuthFailureError) {
+                intent.putExtra("RESP", 0);
+                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+                message = "Cannot connect to Internet...Please check your connection!";
+            } else if (volleyError instanceof ParseError) {
+                intent.putExtra("RESP", 0);
+                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+                message = "Parsing error! Please try again after some time!!";
+            } else if (volleyError instanceof NoConnectionError) {
+                intent.putExtra("RESP", 0);
+                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+                message = "Cannot connect to Internet...Please check your connection!";
+            } else if (volleyError instanceof TimeoutError) {
+                intent.putExtra("RESP", 3);
+                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+                message = "Connection TimeOut! Please check your internet connection.";
+            }
 
 //                Log.e("RED", message);
+        }
+
     }
 
     static Palabra getData(String json) {
@@ -358,14 +364,14 @@ class API {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Toast.makeText( Common.getContext(), Common.context.getResources().getString(R.string.suggest_sent), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Common.getContext(), Common.context.getResources().getString(R.string.suggest_sent), Toast.LENGTH_SHORT).show();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText( Common.getContext(), Common.context.getResources().getString(R.string.try_later), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Common.getContext(), Common.context.getResources().getString(R.string.try_later), Toast.LENGTH_SHORT).show();
             }
-        }){
+        }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
@@ -389,9 +395,9 @@ class API {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText( Common.getContext(), Common.context.getResources().getString(R.string.try_later), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Common.getContext(), Common.context.getResources().getString(R.string.try_later), Toast.LENGTH_SHORT).show();
             }
-        }){
+        }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
@@ -403,6 +409,36 @@ class API {
             }
         };
 
+        Volley.newRequestQueue(Common.context).add(stringRequest);
+    }
+
+    public static void checkIfUpdated(final Context context) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, new Common().getUpdateUrl(), new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Toast.makeText(Common.context, "Inicia todo actualizado", Toast.LENGTH_SHORT).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+//                Toast.makeText(Common.context, "Actualizame " + error.networkResponse.statusCode, Toast.LENGTH_SHORT).show();
+                handleNewtworkErrors(error, context);
+
+//
+//                if (error.networkResponse != null) {
+//                    Toast.makeText(Common.context, "Actualizame " + error.networkResponse.statusCode, Toast.LENGTH_SHORT).show();
+//                } else {
+//                    handleNewtworkErrors(error, context);
+//                }
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("app_version", BuildConfig.VERSION_CODE + "");
+                return params;
+            }
+        };
         Volley.newRequestQueue(Common.context).add(stringRequest);
     }
 

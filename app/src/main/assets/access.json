@@ -3,5 +3,6 @@
   "host": "http://proyecto-dam.esy.es/mijnwords/php/getData.php",
   "host_suggest": "http://proyecto-dam.esy.es/mijnwords/php/inboxSuggestions.php",
   "host_report": "http://proyecto-dam.esy.es/mijnwords/php/reportExample.php",
-  "debug": "http://192.168.1.116/CD_SERVER/getData.php"
+  "host_debug": "http://192.168.1.116/CD_SERVER/getData.php",
+  "update_debug": "http://192.168.1.116/CD_SERVER/checkUpdate.php"
 }
