@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MijnWords</string>
+    <string name="try_again">Opnieuw proberen</string>
+    <string name="no_examples">Er zijn geen voorbeelden voor dit woord</string>
+    <string name="slow_internet">Internetverbinding is te traag</string>
+    <string name="unknow_error">Fout onbekend</string>
+    <string name="no_internet_access">Er is geen internetverbinding</string>
+    <string name="server_off">De service reageert niet</string>
+    <string name="credits">Met dank aan</string>
+    <string name="icons">Pictogrammen</string>
+    <string name="translations">Vertalingen</string>
+</resources>

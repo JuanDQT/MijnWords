@@ -102,6 +102,8 @@ public class HomeActivity extends AppCompatActivity {
 
                 SpinnerLanguageAdapter spAdapterExampleLanguage = new SpinnerLanguageAdapter(HomeActivity.this, new String[]{"EN", "NL"},new int[]{R.drawable.en_lang, R.drawable.nl_lang});
                 spExampleLanguage.setAdapter(spAdapterExampleLanguage);
+                int currentPositionSpinner = spAdapterExampleLanguage.getPosition(Common.getSystemLanguage());
+                spExampleLanguage.setSelection(currentPositionSpinner);
                 spExampleLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

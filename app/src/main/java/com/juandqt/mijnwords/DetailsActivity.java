@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
@@ -60,6 +59,8 @@ public class DetailsActivity extends AppCompatActivity {
     private int indexVerb;
     private ImageButton ibBack;
     private ImageButton ibToggle;
+    private ImageView ivBaseVerb;
+    private ImageView ivExampleVerb;
 
     private static final int ANADIR_EJEMPLO = 0;
     private static final int REPORTAR_EJEMPLO = 1;
@@ -90,6 +91,10 @@ public class DetailsActivity extends AppCompatActivity {
         clEjemploNl = (ConstraintLayout) findViewById(R.id.clEjemploNl);
         ibBack = (ImageButton) findViewById(R.id.ibBack);
         ibToggle = (ImageButton) findViewById(R.id.ibToggle);
+        ivBaseVerb = (ImageView) findViewById(R.id.ivBaseVerb);
+        ivExampleVerb = (ImageView) findViewById(R.id.ivExampleVerb);
+
+        Picasso.with(this).load(Common.allLanguages.get(Common.getSystemLanguage())).into(ivExampleVerb);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(success, new IntentFilter("SUCCESS"));
         LocalBroadcastManager.getInstance(this).registerReceiver(errors, new IntentFilter("ERROR"));
@@ -183,13 +188,13 @@ public class DetailsActivity extends AppCompatActivity {
                         case ANADIR_EJEMPLO:
                             cargarView = LayoutInflater.from(DetailsActivity.this).inflate(R.layout.ad_anadir, null);
                             final EditText etTranslate = (EditText) cargarView.findViewById(R.id.etTranslate);
-                            etTranslate.setHint(Resources.getSystem().getConfiguration().locale.getDisplayLanguage());
+                            etTranslate.setHint(Common.getSystemLanguage());
                             adBuilder.setPositiveButton(getResources().getString(R.string.suggest), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     Toast.makeText(DetailsActivity.this, "Enviado", Toast.LENGTH_SHORT).show();
                                     if (etTranslate.getText().toString().trim().length() > 0) {
-                                        API.postSuggestion(tvWord.getText().toString(), tvEjemploEs.getText().toString(), etTranslate.getText().toString());
+                                        API.postSuggestion(tvWord.getText().toString(), tvEjemploEs.getText().toString(), etTranslate.getText().toString(),Common.getSystemLanguage());
                                     }
                                 }
                             });
@@ -206,7 +211,7 @@ public class DetailsActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     // TODO: reportar
-                                    API.reportEjemplo(tvWord.getText().toString(), tvEjemploEs.getText().toString(), tvEjemploNl.getText().toString() );
+                                    API.reportEjemplo(tvWord.getText().toString(), tvEjemploEs.getText().toString(), tvEjemploNl.getText().toString(), Common.getSystemLanguage() );
                                 }
                             });
 

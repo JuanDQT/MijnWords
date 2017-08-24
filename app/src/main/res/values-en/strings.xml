@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MijnWords</string>
+    <string name="afirmativo"></string>
+    <string name="cancel">Cancel</string>
+    <string name="try_again">Try again</string>
+    <string name="no_examples">There are no examples available for this word</string>
+    <string name="slow_internet">Internet connection is too slow</string>
+    <string name="unknow_error">Error unknown</string>
+    <string name="no_internet_access">There is no internet connection</string>
+    <string name="server_off">The service does not respond</string>
+    <string name="credits">Credits</string>
+    <string name="icons">Icons</string>
+    <string name="translations">Translations</string>
+</resources>

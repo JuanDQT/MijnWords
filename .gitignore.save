@@ -7,5 +7,4 @@
 /build
 /captures
 .externalNativeBuild
-/app/src/main/assets/access.json
-/app/src/main/res/raw/palabras.json
+/src/

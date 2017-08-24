@@ -76,6 +76,8 @@ class API {
                         params.put("id", id);
                         params.put("palabra", palabra);
                         params.put("content", responseHTML);
+                        params.put("lng_base", "ES");
+                        params.put("lng_focus", Common.getSystemLanguage());
                         return params;
                     }
                 };
@@ -158,7 +160,7 @@ class API {
                 // Con 1 ejemplo, es un jsonObject
                 if (jsonEjemplo.length() == 1) {
                     ejemplo.setEjemplosNl(null);
-                    String extractEjemplo = jsonEjemplo.getString("es");
+                    String extractEjemplo = jsonEjemplo.getString("base");
                     Log.e("AD", "Solo un ejemplo que contiene: " + extractEjemplo);
                     ArrayList<String> ejemplos = new ArrayList<>();
                     ejemplos.add(extractEjemplo);
@@ -169,8 +171,8 @@ class API {
 
                     // Con 2, es un jsonArray
                 } else if (jsonEjemplo.length() == 2) {
-                    JSONArray jsonEjemplosEs = jsonEjemplo.getJSONArray("es");
-                    JSONArray jsonEjemplosNl = jsonEjemplo.getJSONArray("nl");
+                    JSONArray jsonEjemplosEs = jsonEjemplo.getJSONArray("base");
+                    JSONArray jsonEjemplosNl = jsonEjemplo.getJSONArray("focus");
                     Log.e("AD", "Mas de: " + jsonEjemplosEs.length());
 
                     ArrayList<String> ejemplosEs = new ArrayList<>();
@@ -350,7 +352,7 @@ class API {
         return palabra;
     }
 
-    public static void postSuggestion(final String verb, final String baseExample, final String newExample) {
+    public static void postSuggestion(final String verb, final String baseExample, final String newExample, final String focusLanguage) {
         final String url = new Common().getUrlSuggestion();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
@@ -369,6 +371,7 @@ class API {
                 Map<String, String> params = new HashMap<>();
                 params.put("verb", verb);
                 params.put("base_example", baseExample);
+                params.put("focus_language", focusLanguage);
                 params.put("new_example", newExample);
                 return params;
             }
@@ -377,7 +380,7 @@ class API {
         Volley.newRequestQueue(Common.context).add(stringRequest);
     }
 
-    public static void reportEjemplo(final String verb, final String baseExample, final String translatedExample) {
+    public static void reportEjemplo(final String verb, final String baseExample, final String translatedExample, final String focusLanguage) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, new Common().getUrlHostReport(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -394,6 +397,7 @@ class API {
                 Map<String, String> params = new HashMap<>();
                 params.put("verb", verb);
                 params.put("base_example", baseExample);
+                params.put("focus_language", focusLanguage);
                 params.put("translated_example", translatedExample);
                 return params;
             }

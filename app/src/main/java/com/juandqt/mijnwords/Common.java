@@ -168,7 +168,6 @@ public class Common extends Application {
         String ln = "";
         SharedPreferences sharedPreferences = context.getSharedPreferences("SP", Context.MODE_PRIVATE);
         if (sharedPreferences.contains("LN")) {
-
             ln = sharedPreferences.getString("LN", "EN");
             Log.e("SP", "Cargamos:  " + ln);
 
