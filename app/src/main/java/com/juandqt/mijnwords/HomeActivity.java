@@ -45,11 +45,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        // Check if this applications is updated!
-        API.checkIfUpdated(this);
-
         // Leemos
-
         final InputStream inputStream = getResources().openRawResource(R.raw.palabras); // getting XML
 
         Scanner s = new Scanner(inputStream).useDelimiter("\\A");
@@ -198,4 +194,6 @@ public class HomeActivity extends AppCompatActivity {
 
         return id;
     }
+
+
 }

@@ -98,6 +98,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         LocalBroadcastManager.getInstance(this).registerReceiver(success, new IntentFilter("SUCCESS"));
         LocalBroadcastManager.getInstance(this).registerReceiver(errors, new IntentFilter("ERROR"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(update,new IntentFilter("UPDATE"));
 
         palabraId = getIntent().getStringExtra("id");
         palabra = getIntent().getStringExtra("word");
@@ -232,6 +233,14 @@ public class DetailsActivity extends AppCompatActivity {
         }
 
 
+    };
+
+    private BroadcastReceiver update = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            startActivity(new Intent(DetailsActivity.this, UpdateAppActivity.class));
+            finish();
+        }
     };
 
     private BroadcastReceiver errors = new BroadcastReceiver() {

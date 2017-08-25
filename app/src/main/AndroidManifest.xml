@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name="com.juandqt.mijnwords.Common"
+        android:name=".Common"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -13,22 +13,26 @@
         android:supportsRtl="true"
         android:theme="@style/FullScreen">
         <activity
-            android:name="com.juandqt.mijnwords.SplashScreenActivity"
+            android:name=".SplashScreenActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.juandqt.mijnwords.HomeActivity"
+            android:name=".HomeActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.juandqt.mijnwords.DetailsActivity"
+            android:name=".DetailsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/FullScreen" />
+        <activity
+            android:theme="@style/FullScreen"
+            android:name=".UpdateAppActivity"
+            ></activity>
     </application>
 
 </manifest>
