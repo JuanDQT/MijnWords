@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:visibility="visible"
     tools:context="com.juandqt.mijnwords.DetailsActivity"
+    android:animateLayoutChanges="true"
     >
 
     <include
@@ -13,12 +14,13 @@
         layout="@layout/toolbar_details"
         android:visibility="visible" />
 
+
     <android.support.v4.view.ViewPager
         android:id="@+id/vpContent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@+id/header"
-        android:visibility="gone"></android.support.v4.view.ViewPager>
+        android:visibility="visible" />
 
     <ProgressBar
         android:id="@+id/pgLoading"
@@ -57,7 +59,7 @@
         <Button
             android:id="@+id/btnError"
             style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="150dp"
+            android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"

@@ -11,7 +11,7 @@
     <string name="title_error" translatable="false">Ops!</string>
 
     <string name="credits">Créditos</string>
-    <string name="version" translatable="false">Versión 0.1</string>
+    <string name="version" translatable="false">Versión 0.2</string>
     <string name="icons">Iconos</string>
     <string name="translations">Traducciones</string>
     <string name="suggest_translation">Sugerir traducción para…</string>
@@ -29,7 +29,7 @@
     <string name="config_languages">Configurar idiomas</string>
     <string name="none" translatable="false">None</string>
     <string name="update" translatable="false">Update</string>
-    <string name="no_language_available">Próximamemnte se anadirán más idiomas</string>
+    <string name="no_language_available">Próximamente se anadirán más idiomas</string>
 
     <!--No traducir-->
 
@@ -39,7 +39,7 @@
     <string name="preterito_indefinido" translatable="false">Pretérito indefinido</string>
     <string name="futuro" translatable="false">Futuro</string>
     <string name="condicional" translatable="false">Condicional</string>
-    <string name="afirmativo">Afirmativo</string>
+    <string name="afirmativo" translatable="false">Afirmativo</string>
     <string name="negativo" translatable="false">Negativo</string>
 
     <string name="modo_subjuntivo" translatable="false">Modo subjuntivo</string>
@@ -49,10 +49,10 @@
     <string name="yo" translatable="false">Yo</string>
     <string name="tu" translatable="false">Tú</string>
     <string name="tu_no" translatable="false">Tú no</string>
-    <string name="usted">Usted</string>
-    <string name="usted_no">Usted no</string>
-    <string name="ustedes">Ustedes</string>
-    <string name="ustedes_no">Ustedes no</string>
+    <string name="usted" translatable="false">Usted</string>
+    <string name="usted_no" translatable="false">Usted no</string>
+    <string name="ustedes" translatable="false">Ustedes</string>
+    <string name="ustedes_no" translatable="false">Ustedes no</string>
     <string name="el" translatable="false">Él, ella, usted</string>
     <string name="nosotros" translatable="false">Nosotros</string>
     <string name="nosotros_no" translatable="false">Nosotros no</string>

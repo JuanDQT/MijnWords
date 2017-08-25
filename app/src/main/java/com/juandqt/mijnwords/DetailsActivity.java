@@ -26,6 +26,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fujiyuu75.sequent.Sequent;
 import com.juandqt.mijnwords.fragments.FragmentModoCondicional;
 import com.juandqt.mijnwords.fragments.FragmentModoImperativo;
 import com.juandqt.mijnwords.fragments.FragmentModoIndicativo;
@@ -61,6 +62,9 @@ public class DetailsActivity extends AppCompatActivity {
     private ImageButton ibToggle;
     private ImageView ivBaseVerb;
     private ImageView ivExampleVerb;
+    private ImageView ivShowExamples;
+
+    private boolean exampleIsShow = false;
 
     private static final int ANADIR_EJEMPLO = 0;
     private static final int REPORTAR_EJEMPLO = 1;
@@ -93,12 +97,13 @@ public class DetailsActivity extends AppCompatActivity {
         ibToggle = (ImageButton) findViewById(R.id.ibToggle);
         ivBaseVerb = (ImageView) findViewById(R.id.ivBaseVerb);
         ivExampleVerb = (ImageView) findViewById(R.id.ivExampleVerb);
+        ivShowExamples = (ImageView) findViewById(R.id.ivShowExamples);
 
         Picasso.with(this).load(Common.allLanguages.get(Common.getSystemLanguage())).into(ivExampleVerb);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(success, new IntentFilter("SUCCESS"));
         LocalBroadcastManager.getInstance(this).registerReceiver(errors, new IntentFilter("ERROR"));
-        LocalBroadcastManager.getInstance(this).registerReceiver(update,new IntentFilter("UPDATE"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(update, new IntentFilter("UPDATE"));
 
         palabraId = getIntent().getStringExtra("id");
         palabra = getIntent().getStringExtra("word");
@@ -115,12 +120,30 @@ public class DetailsActivity extends AppCompatActivity {
             }
         });
 
+        ivShowExamples.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (exampleIsShow) {
+                    ivShowExamples.animate().rotation(270).setDuration(300);
+                    clEjemplos.setVisibility(View.GONE);
+
+                } else {
+                    ivShowExamples.animate().rotation(90).setDuration(300);
+                    clEjemplos.setVisibility(View.VISIBLE);
+                }
+
+                exampleIsShow = !exampleIsShow;
+            }
+        });
+
     }
 
     // Recibidor
     private BroadcastReceiver success = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, final Intent intent) {
+
             pbLoading.setVisibility(View.GONE);
             clHeaderContent.setVisibility(View.VISIBLE);
             vpContent.setVisibility(View.VISIBLE);
@@ -131,7 +154,6 @@ public class DetailsActivity extends AppCompatActivity {
 
             final Palabra palabra = params.get("palabra");
 
-
             VerbsPageAdapter verbsPageAdapter = new VerbsPageAdapter(getSupportFragmentManager(), new Fragment[]{new FragmentModoIndicativo(palabra.getModoIndicativo()), new FragmentModoSubjuntivo(palabra.getModoSubjuntivo()), new FragmentModoCondicional(palabra.getModoCondicional()), new FragmentModoImperativo(palabra.getModoImperativo())});
             vpContent.setAdapter(verbsPageAdapter);
 
@@ -139,6 +161,8 @@ public class DetailsActivity extends AppCompatActivity {
 //                Toast.makeText(context, "No hay ejemplos", Toast.LENGTH_SHORT).show();
                 //No hay ejemplos
             } else {
+                ivShowExamples.setVisibility(View.VISIBLE);
+
                 // Un ejemplo en espanol
                 clEjemplos.setVisibility(View.VISIBLE);
                 clEjemploEs.setVisibility(View.VISIBLE);
@@ -163,12 +187,11 @@ public class DetailsActivity extends AppCompatActivity {
                     ibRefresh.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-//                            Log.e("AD", "Indice: " + indexVerb);
                             indexVerb = indexVerb + 1 == palabra.getEjemplo().getEjemplosEs().size() ? 0 : indexVerb + 1;
                             tvEjemploEs.setText(palabra.getEjemplo().getEjemplosEs().get(indexVerb));
                             tvEjemploNl.setText(palabra.getEjemplo().getEjemplosNl().get(indexVerb));
-//                            Sequent.origin(clEjemploEs).start();
-//                            Sequent.origin(clEjemploNl).start();
+                            ibRefresh.animate().rotation(ibRefresh.getRotation() + 180).setDuration(300).start();
+
                         }
                     });
 
@@ -177,6 +200,8 @@ public class DetailsActivity extends AppCompatActivity {
 
                 // https://www.android-arsenal.com/details/1/5828
 //                Sequent.origin(clEjemploEs).start();
+
+                exampleIsShow = true;
             }
 
             ibToggle.setOnClickListener(new View.OnClickListener() {
@@ -195,7 +220,7 @@ public class DetailsActivity extends AppCompatActivity {
                                 public void onClick(DialogInterface dialog, int which) {
                                     Toast.makeText(DetailsActivity.this, "Enviado", Toast.LENGTH_SHORT).show();
                                     if (etTranslate.getText().toString().trim().length() > 0) {
-                                        API.postSuggestion(tvWord.getText().toString(), tvEjemploEs.getText().toString(), etTranslate.getText().toString(),Common.getSystemLanguage());
+                                        API.postSuggestion(tvWord.getText().toString(), tvEjemploEs.getText().toString(), etTranslate.getText().toString(), Common.getSystemLanguage());
                                     }
                                 }
                             });
@@ -212,7 +237,7 @@ public class DetailsActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     // TODO: reportar
-                                    API.reportEjemplo(tvWord.getText().toString(), tvEjemploEs.getText().toString(), tvEjemploNl.getText().toString(), Common.getSystemLanguage() );
+                                    API.reportEjemplo(tvWord.getText().toString(), tvEjemploEs.getText().toString(), tvEjemploNl.getText().toString(), Common.getSystemLanguage());
                                 }
                             });
 
@@ -244,8 +269,10 @@ public class DetailsActivity extends AppCompatActivity {
     };
 
     private BroadcastReceiver errors = new BroadcastReceiver() {
+
         @Override
         public void onReceive(Context context, Intent intent) {
+            Sequent.origin(llError).start();
 
             int typeError = intent.getIntExtra("RESP", 0);
 
