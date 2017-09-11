@@ -14,7 +14,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -38,6 +37,7 @@ import java.util.HashMap;
 
 public class DetailsActivity extends AppCompatActivity {
 
+    // Default views
     private ProgressBar pbLoading;
     private LinearLayout llError;
     private ImageView ivError;
@@ -54,10 +54,10 @@ public class DetailsActivity extends AppCompatActivity {
     private ConstraintLayout clEjemploEs;
     private ConstraintLayout clEjemploNl;
 
+    // Views
     private TextView tvEjemploEs;
     private TextView tvEjemploNl;
     private ImageButton ibRefresh;
-    private int indexVerb;
     private ImageButton ibBack;
     private ImageButton ibToggle;
     private ImageView ivBaseVerb;
@@ -65,6 +65,7 @@ public class DetailsActivity extends AppCompatActivity {
     private ImageView ivShowExamples;
 
     private boolean exampleIsShow = false;
+    private int indexVerb;
 
     private static final int ANADIR_EJEMPLO = 0;
     private static final int REPORTAR_EJEMPLO = 1;
@@ -195,7 +196,6 @@ public class DetailsActivity extends AppCompatActivity {
                         }
                     });
 
-//                    Sequent.origin(clEjemploNl).start();
                 }
 
                 // https://www.android-arsenal.com/details/1/5828
@@ -260,6 +260,7 @@ public class DetailsActivity extends AppCompatActivity {
 
     };
 
+    // Ops! actualiza tu app!
     private BroadcastReceiver update = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -268,6 +269,7 @@ public class DetailsActivity extends AppCompatActivity {
         }
     };
 
+    // Clasificacion de errores
     private BroadcastReceiver errors = new BroadcastReceiver() {
 
         @Override
@@ -278,24 +280,20 @@ public class DetailsActivity extends AppCompatActivity {
 
             switch (typeError) {
                 case 0:
-                    Log.e("RED", "Error descomocido :P");
                     Picasso.with(context).load(R.drawable.unknow_error).into(ivError);
                     tvError.setText(getResources().getString(R.string.unknow_error));
                     break;
                 case 1:
-                    Log.e("RED", "No hay conexion a internet");
                     Picasso.with(context).load(R.drawable.no_network).into(ivError);
                     tvError.setText(getResources().getString(R.string.no_internet_access));
                     break;
                 case 2:
                     // Solo cuando el te deniega el acceso
-                    Log.e("RED", "El servidor parece off");
                     Picasso.with(context).load(R.drawable.server_error).into(ivError);
                     tvError.setText(getResources().getString(R.string.server_off));
                     break;
                 case 3:
                     // Tu internet es lento o no se puede conectar con el servidor
-                    Log.e("RED", "Conexion a internet lenta");
                     Picasso.with(context).load(R.drawable.slow_internet).into(ivError);
                     tvError.setText(getResources().getString(R.string.slow_internet));
                     break;
@@ -328,7 +326,6 @@ public class DetailsActivity extends AppCompatActivity {
 
         public VerbsPageAdapter(FragmentManager fm, Fragment[] pages) {
             super(fm);
-            Log.e("FR", "frgments creados");
             this.pages = pages;
         }
 

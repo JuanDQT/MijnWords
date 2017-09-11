@@ -4,7 +4,6 @@ import android.animation.ValueAnimator;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
@@ -33,6 +32,7 @@ public class Common extends Application {
         allLanguages = instanceMapLanguages();
     }
 
+    // Almacenamos las referencias de code idiomas en un map para ser accedido mas facilmente
     private HashMap<String, Integer> instanceMapLanguages() {
         HashMap<String, Integer> map = new HashMap<>();
         map.put("ES", R.drawable.es_lang);
@@ -41,6 +41,7 @@ public class Common extends Application {
         return map;
     }
 
+    // Contexto global de la aplicacion
     public static Context getContext() {
         return context;
     }
@@ -59,6 +60,7 @@ public class Common extends Application {
         return url.replace("\n", "").replace("\r", "");
     }
 
+    // URl verbos...
     public String getUrlURL(String id) {
 
         String jsonUrlFile = openJSON(FILE);
@@ -99,7 +101,6 @@ public class Common extends Application {
 
     }
 
-    // Test
     public static void expand(final View v, int duration, int targetHeight) {
 
         int prevHeight = v.getHeight();
@@ -135,7 +136,7 @@ public class Common extends Application {
         valueAnimator.start();
     }
 
-
+    // Url para subir sugerencias de ejemplos
     public String getUrlSuggestion() {
 
         String jsonUrlFile = openJSON(FILE);
@@ -150,6 +151,7 @@ public class Common extends Application {
         return url.replace("\n", "").replace("\r", "");
     }
 
+    // URL para subir erroes de ejemplos
     public String getUrlHostReport() {
 
         String jsonUrlFile = openJSON(FILE);
@@ -164,19 +166,16 @@ public class Common extends Application {
         return url.replace("\n", "").replace("\r", "");
     }
 
+    // Lenguaje del cual el usuario guardó como configuracion para ver los ejemplos en X lenguaje
     public static String getSystemLanguage() {
         String ln = "";
         SharedPreferences sharedPreferences = context.getSharedPreferences("SP", Context.MODE_PRIVATE);
         if (sharedPreferences.contains("LN")) {
-            ln = sharedPreferences.getString("LN", "EN");
-            Log.e("SP", "Cargamos:  " + ln);
-
-
             // cargamos del sh
+            ln = sharedPreferences.getString("LN", "EN");
         } else {
 
             ln = "EN";
-            Log.e("SP", "Nada guardado " + ln);
         }
 
         return ln;

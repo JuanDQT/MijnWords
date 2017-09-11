@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +30,7 @@ import java.util.Scanner;
 
 public class HomeActivity extends AppCompatActivity {
 
+    // Views
     private EditText mInput;
     private Button mBuscar;
     private Context mContext;
@@ -46,7 +46,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         // Leemos
-        final InputStream inputStream = getResources().openRawResource(R.raw.palabras); // getting XML
+        final InputStream inputStream = getResources().openRawResource(R.raw.palabras); // getting JSON
 
         Scanner s = new Scanner(inputStream).useDelimiter("\\A");
         final String jsonString = s.hasNext() ? s.next() : "";
@@ -63,7 +63,6 @@ public class HomeActivity extends AppCompatActivity {
         mInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
-                    Log.i("NEw","Enter pressed");
                     mBuscar.callOnClick();
                 }
                 return false;
@@ -122,7 +121,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        //
+        // Go try search word
         mBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -153,6 +152,7 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
+    // Comprobamos si la palabra existe en el JSON file
     public String getIdByPalabra(String json, String palabra) {
 
         String id = "";
@@ -160,7 +160,6 @@ public class HomeActivity extends AppCompatActivity {
         try {
             jsonFile = new JSONObject(json);
         } catch (JSONException e) {
-            Log.e("ERROR", "JSON mal formado");
             e.printStackTrace();
         }
 
@@ -185,7 +184,6 @@ public class HomeActivity extends AppCompatActivity {
                 }
 
             } catch (Exception e) {
-                Log.e("JSON", "q fas nen");
                 e.printStackTrace();
             }
 

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +12,8 @@ import android.view.ViewTreeObserver;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.juandqt.mijnwords.R;
-
 import com.juandqt.mijnwords.Common;
+import com.juandqt.mijnwords.R;
 import com.juandqt.mijnwords.models.ModoVerbo;
 
 /**
@@ -53,7 +51,6 @@ public class FragmentModoIndicativo extends Fragment implements View.OnClickList
             public void onGlobalLayout() {
                 constraintLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 maxHeight = constraintLayout.getMeasuredHeight();
-                Log.e("FR", "Size tv: " + maxHeight);
 
             }
         });

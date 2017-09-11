@@ -3,7 +3,6 @@ package com.juandqt.mijnwords;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -38,6 +37,9 @@ import java.util.Map;
 // https://stackoverflow.com/questions/3947641/android-equivalent-to-nsnotificationcenter
 class API {
 
+    // MARK: - Descargamos los datos de la pagina y se lo enviamos al servidor
+
+
     static void getResultados(final Context context, final String id, final String palabra) {
         // Instantiate the RequestQueue.
         final RequestQueue queue = Volley.newRequestQueue(context);
@@ -59,7 +61,6 @@ class API {
                                 Palabra palabra = getData(response);
 
                                 if (palabra == null) {
-                                    Log.e("RESP", "On response ered null, update");
                                     LocalBroadcastManager.getInstance(Common.context).sendBroadcast(new Intent("UPDATE"));
                                     return;
                                 }
@@ -96,7 +97,6 @@ class API {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                Log.e("RESP", "err: " + volleyError.getMessage());
                 handleNewtworkErrors(volleyError, context);
             }
         });
@@ -106,9 +106,9 @@ class API {
         queue.add(contentRequest);
     }
 
+    // Errores de conexión, server off, no responde..
     private static void handleNewtworkErrors(VolleyError volleyError, Context context) {
         Intent intent = new Intent("ERROR");
-        String message = null;
 
         if (volleyError instanceof NetworkError) {
             intent.putExtra("RESP", 1);
@@ -132,9 +132,8 @@ class API {
 
     }
 
+    // Devolvemos el objeto Palabra como resultado al movil.
     static Palabra getData(String json) {
-
-        Log.e("RED", json);
 
         Palabra palabra = new Palabra();
 
@@ -150,34 +149,28 @@ class API {
 
             // Checking app updates
             if (!jsonRoot.getBoolean("updated")) {
-                Log.e("RESP", "actualizame");
                 return null;
             }
 
             if (jsonRoot.isNull("ejemplo")) {
-                Log.e("AD", "no ejemplos");
                 palabra.setEjemplo(null);
             } else {
                 JSONObject jsonEjemplo = jsonRoot.getJSONObject("ejemplo");
-                Log.e("AD", "Bien, tenemos: " + jsonEjemplo.length());
                 Ejemplo ejemplo = new Ejemplo();
                 // Con 1 ejemplo, es un jsonObject
                 if (jsonEjemplo.length() == 1) {
                     ejemplo.setEjemplosNl(null);
                     String extractEjemplo = jsonEjemplo.getString("base");
-                    Log.e("AD", "Solo un ejemplo que contiene: " + extractEjemplo);
                     ArrayList<String> ejemplos = new ArrayList<>();
                     ejemplos.add(extractEjemplo);
                     ejemplo.setEjemplosEs(ejemplos);
                     palabra.setEjemplo(ejemplo);
 
-                    Log.e("AD", ejemplos.toString());
 
                     // Con 2, es un jsonArray
                 } else if (jsonEjemplo.length() == 2) {
                     JSONArray jsonEjemplosEs = jsonEjemplo.getJSONArray("base");
                     JSONArray jsonEjemplosNl = jsonEjemplo.getJSONArray("focus");
-                    Log.e("AD", "Mas de: " + jsonEjemplosEs.length());
 
                     ArrayList<String> ejemplosEs = new ArrayList<>();
                     ArrayList<String> ejemplosNl = new ArrayList<>();
@@ -350,8 +343,6 @@ class API {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-        Log.e("RED", "Test MS: " + palabra.toString());
 
         return palabra;
     }

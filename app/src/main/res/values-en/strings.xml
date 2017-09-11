@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MijnWords</string>
-    <string name="afirmativo"></string>
     <string name="cancel">Cancel</string>
     <string name="try_again">Try again</string>
     <string name="no_examples">There are no examples available for this word</string>

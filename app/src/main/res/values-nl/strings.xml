@@ -26,5 +26,4 @@
     <string name="wrong_translation">Verkeerde vertaling</string>
     <string name="wrong_translation_description">Dit voorbeeld wordt gerapporteerd als onjuist</string>
     <string name="no_language_available">Binnenkort worden meer talen toegevoegd</string>
-    <string name="afirmativo" translatable="false"></string>
 </resources>
