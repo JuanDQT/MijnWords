@@ -18,9 +18,6 @@
     <string name="report_sent">Example reported correctly</string>
     <string name="save">Save</string>
     <string name="search">Search</string>
-    <string name="suggest">Suggest</string>
-    <string name="suggest_sent">Suggestion sent correctly</string>
-    <string name="suggest_translation">Suggest translation for…</string>
     <string name="try_later">Try again later</string>
     <string name="verbs_in">Verbs in</string>
     <string name="wrong_translation">Wrong translation</string>
