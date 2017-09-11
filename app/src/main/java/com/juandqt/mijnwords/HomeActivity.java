@@ -127,10 +127,10 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 // Obtenemos la palabra del fichero JSON
-                String palabra = mInput.getText().toString();
+                String palabra = mInput.getText().toString().trim();
 
                 // Check if the input is not empty
-                if (palabra.trim().length() > 0) {
+                if (palabra.length() > 0) {
 
                     String id = getIdByPalabra(jsonString, palabra);
 

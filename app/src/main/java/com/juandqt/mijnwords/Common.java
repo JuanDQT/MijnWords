@@ -60,22 +60,6 @@ public class Common extends Application {
         return url.replace("\n", "").replace("\r", "");
     }
 
-    // URl verbos...
-    public String getUrlURL(String id) {
-
-        String jsonUrlFile = openJSON(FILE);
-        String url = "";
-        try {
-            JSONObject jsonUrl = new JSONObject(jsonUrlFile);
-            url = jsonUrl.getString("url");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        url = url.replace("XXX", id);
-
-        return url.replace("\n", "").replace("\r", "");
-    }
-
     public String openJSON(String jsonFile) {
         String json = null;
         try {
@@ -134,21 +118,6 @@ public class Common extends Application {
         valueAnimator.setInterpolator(new DecelerateInterpolator());
         valueAnimator.setDuration(duration);
         valueAnimator.start();
-    }
-
-    // Url para subir sugerencias de ejemplos
-    public String getUrlSuggestion() {
-
-        String jsonUrlFile = openJSON(FILE);
-        String url = "";
-        try {
-            JSONObject jsonUrl = new JSONObject(jsonUrlFile);
-            url = jsonUrl.getString("host_suggest");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return url.replace("\n", "").replace("\r", "");
     }
 
     // URL para subir erroes de ejemplos

@@ -11,11 +11,9 @@
     <string name="title_error" translatable="false">Ops!</string>
 
     <string name="credits">Créditos</string>
-    <string name="version" translatable="false">Versión 0.2</string>
+    <string name="version" translatable="false">Versión 0.3</string>
     <string name="icons">Iconos</string>
     <string name="translations">Traducciones</string>
-    <string name="suggest_translation">Sugerir traducción para…</string>
-    <string name="suggest">Sugerir</string>
     <string name="cancel">Cancelar</string>
     <string name="suggest_sent">Sugerencia enviada correctamente!</string>
     <string name="report_sent">Ejemplo reportado correctamente!</string>
