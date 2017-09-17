@@ -14,13 +14,9 @@
     <string name="config_languages">Talen configureren</string>
     <string name="examples_in">Voorbeelden in</string>
     <string name="introduce_word">Introduceer een woord</string>
-    <string name="report">Rapporteren</string>
-    <string name="report_sent">Voorbeeld correct gerapporteerd</string>
     <string name="save">Opslaan</string>
     <string name="search">Zoeken</string>
     <string name="try_later">Probeer later opnieuw</string>
     <string name="verbs_in">Werkwoorden in</string>
-    <string name="wrong_translation">Verkeerde vertaling</string>
-    <string name="wrong_translation_description">Dit voorbeeld wordt gerapporteerd als onjuist</string>
     <string name="no_language_available">Binnenkort worden meer talen toegevoegd</string>
 </resources>

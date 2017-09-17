@@ -15,13 +15,9 @@
     <string name="icons">Iconos</string>
     <string name="translations">Traducciones</string>
     <string name="cancel">Cancelar</string>
-    <string name="report_sent">Ejemplo reportado correctamente!</string>
     <string name="verbs_in">Verbos en</string>
     <string name="examples_in">Ejemplos en</string>
     <string name="try_later">Intentelo de nuevo mas tarde</string>
-    <string name="wrong_translation">Traduccion errónea</string>
-    <string name="wrong_translation_description">Se notificará como erróneo este ejemplo</string>
-    <string name="report">Reportar</string>
     <string name="save">Guardar</string>
     <string name="config_languages">Configurar idiomas</string>
     <string name="none" translatable="false">None</string>

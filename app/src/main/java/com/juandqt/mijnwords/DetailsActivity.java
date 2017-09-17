@@ -2,7 +2,6 @@ package com.juandqt.mijnwords;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -12,7 +11,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -54,14 +52,10 @@ public class DetailsActivity extends AppCompatActivity {
     // Views
     private TextView tvEjemploEs;
     private TextView tvEjemploNl;
-    private ImageButton ibRefresh;
     private ImageButton ibBack;
-    private ImageButton ibToggle;
     private ImageView ivBaseVerb;
     private ImageView ivExampleVerb;
-    private ImageView ivShowExamples;
 
-    private boolean exampleIsShow = false;
     private int indexVerb;
 
     /**
@@ -77,7 +71,6 @@ public class DetailsActivity extends AppCompatActivity {
         ivError = (ImageView) findViewById(R.id.ivError);
         tvError = (TextView) findViewById(R.id.tvError);
         btnError = (Button) findViewById(R.id.btnError);
-        ibRefresh = (ImageButton) findViewById(R.id.ibRefresh);
         tvWord = (TextView) findViewById(R.id.tvWord);
         tvEjemploEs = (TextView) findViewById(R.id.tvEjemploEs);
         tvEjemploNl = (TextView) findViewById(R.id.tvEjemploNl);
@@ -88,10 +81,8 @@ public class DetailsActivity extends AppCompatActivity {
         clEjemploEs = (ConstraintLayout) findViewById(R.id.clEjemploEs);
         clEjemploNl = (ConstraintLayout) findViewById(R.id.clEjemploNl);
         ibBack = (ImageButton) findViewById(R.id.ibBack);
-        ibToggle = (ImageButton) findViewById(R.id.ibToggle);
         ivBaseVerb = (ImageView) findViewById(R.id.ivBaseVerb);
         ivExampleVerb = (ImageView) findViewById(R.id.ivExampleVerb);
-        ivShowExamples = (ImageView) findViewById(R.id.ivShowExamples);
 
         Picasso.with(this).load(Common.allLanguages.get(Common.getSystemLanguage())).into(ivExampleVerb);
 
@@ -111,23 +102,6 @@ public class DetailsActivity extends AppCompatActivity {
                 vpContent.setAdapter(null);
                 startActivity(new Intent(DetailsActivity.this, HomeActivity.class));
                 finish();
-            }
-        });
-
-        ivShowExamples.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (exampleIsShow) {
-                    ivShowExamples.animate().rotation(270).setDuration(300);
-                    clEjemplos.setVisibility(View.GONE);
-
-                } else {
-                    ivShowExamples.animate().rotation(90).setDuration(300);
-                    clEjemplos.setVisibility(View.VISIBLE);
-                }
-
-                exampleIsShow = !exampleIsShow;
             }
         });
 
@@ -154,24 +128,20 @@ public class DetailsActivity extends AppCompatActivity {
 //                Toast.makeText(context, "No hay ejemplos", Toast.LENGTH_SHORT).show();
                 //No hay ejemplos
             } else {
-                ivShowExamples.setVisibility(View.VISIBLE);
 
                 // Un ejemplo en espanol
                 clEjemplos.setVisibility(View.VISIBLE);
-                ibRefresh.setVisibility(View.VISIBLE);
                 tvEjemploEs.setText(palabra.getEjemplo().getEjemplosEs().get(0));
                 tvEjemploNl.setText(palabra.getEjemplo().getEjemplosNl().get(0));
-                Picasso.with(DetailsActivity.this).load(android.R.drawable.ic_dialog_alert).into(ibToggle);
 
                 // Varios ejemplos en espanol
 
-                ibRefresh.setOnClickListener(new View.OnClickListener() {
+                clEjemplos.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         indexVerb = indexVerb + 1 == palabra.getEjemplo().getEjemplosEs().size() ? 0 : indexVerb + 1;
                         tvEjemploEs.setText(palabra.getEjemplo().getEjemplosEs().get(indexVerb));
                         tvEjemploNl.setText(palabra.getEjemplo().getEjemplosNl().get(indexVerb));
-                        ibRefresh.animate().rotation(ibRefresh.getRotation() + 180).setDuration(300).start();
 
                     }
                 });
@@ -180,35 +150,7 @@ public class DetailsActivity extends AppCompatActivity {
                 // https://www.android-arsenal.com/details/1/5828
 //                Sequent.origin(clEjemploEs).start();
 
-                exampleIsShow = true;
             }
-
-            ibToggle.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AlertDialog.Builder adBuilder = new AlertDialog.Builder(DetailsActivity.this);
-
-                    adBuilder.setTitle(DetailsActivity.this.getResources().getString(R.string.wrong_translation));
-                    adBuilder.setMessage(DetailsActivity.this.getResources().getString(R.string.wrong_translation_description));
-                    adBuilder.setPositiveButton(DetailsActivity.this.getResources().getString(R.string.report), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // TODO: reportar
-                            API.reportEjemplo(tvWord.getText().toString(), tvEjemploEs.getText().toString(), tvEjemploNl.getText().toString(), Common.getSystemLanguage());
-                        }
-                    });
-
-                    adBuilder.setNegativeButton(DetailsActivity.this.getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    });
-                    AlertDialog adRelease = adBuilder.create();
-                    adRelease.show();
-
-                }
-            });
 
         }
 

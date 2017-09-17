@@ -3,7 +3,6 @@ package com.juandqt.mijnwords;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
@@ -271,31 +270,6 @@ class API {
         return palabra;
     }
 
-    public static void reportEjemplo(final String verb, final String baseExample, final String translatedExample, final String focusLanguage) {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, new Common().getUrlHostReport(), new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Toast.makeText(Common.context, Common.context.getResources().getString(R.string.report_sent), Toast.LENGTH_SHORT).show();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(Common.getContext(), Common.context.getResources().getString(R.string.try_later), Toast.LENGTH_SHORT).show();
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("verb", verb);
-                params.put("base_example", baseExample);
-                params.put("focus_language", focusLanguage);
-                params.put("translated_example", translatedExample);
-                return params;
-            }
-        };
-
-        Volley.newRequestQueue(Common.context).add(stringRequest);
-    }
 
 
 }

@@ -14,13 +14,9 @@
     <string name="config_languages">Configure languages</string>
     <string name="examples_in">Examples in</string>
     <string name="introduce_word">Introduce a word</string>
-    <string name="report">Report</string>
-    <string name="report_sent">Example reported correctly</string>
     <string name="save">Save</string>
     <string name="search">Search</string>
     <string name="try_later">Try again later</string>
     <string name="verbs_in">Verbs in</string>
-    <string name="wrong_translation">Wrong translation</string>
-    <string name="wrong_translation_description">This example will be reported as incorrect</string>
     <string name="no_language_available">Soon more languages will be introduced</string>
 </resources>

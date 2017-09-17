@@ -41,13 +41,13 @@
                 <TextView
                     android:id="@+id/tvWord"
                     android:layout_width="wrap_content"
-                    android:layout_height="58dp"
-                    android:layout_marginTop="24dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:clickable="true"
                     android:fontFamily="sans-serif"
                     android:textAlignment="center"
                     android:textColor="#ffffff"
-                    android:textSize="36sp"
+                    android:textSize="30sp"
                     android:typeface="sans"
                     android:visibility="visible"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -56,54 +56,30 @@
 
                 <android.support.constraint.ConstraintLayout
                     android:id="@+id/clEjemplos"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_height="125dp"
                     android:visibility="gone"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvWord">
 
-                    <ImageButton
-                        android:id="@+id/ibRefresh"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:layout_centerVertical="true"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:adjustViewBounds="false"
-                        android:background="@android:color/transparent"
-                        android:contentDescription="@string/none"
-                        android:cropToPadding="false"
-                        android:elevation="0dp"
-                        android:padding="10dp"
-                        android:scaleType="fitXY"
-                        android:visibility="visible"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.507"
-                        app:srcCompat="@drawable/refresh" />
-
                     <RelativeLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
-                        android:layout_marginEnd="8dp"
                         android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintLeft_toRightOf="@+id/ibRefresh"
-                        app:layout_constraintRight_toLeftOf="@+id/ibToggle"
+                        app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
                         <android.support.constraint.ConstraintLayout
                             android:id="@+id/clEjemploEs"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_margin="0dp"
                             android:layout_marginBottom="8dp"
                             android:layout_marginEnd="8dp"
                             android:layout_marginLeft="8dp"
@@ -140,11 +116,13 @@
                                 android:layout_marginRight="8dp"
                                 android:layout_marginStart="8dp"
                                 android:layout_marginTop="8dp"
+                                android:maxLines="2"
                                 android:paddingLeft="10dp"
                                 android:paddingRight="15dp"
+                                android:singleLine="false"
                                 android:textAlignment="viewStart"
                                 android:textColor="#ddd"
-                                android:textSize="18sp"
+                                android:textSize="15sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintLeft_toRightOf="@+id/ivBaseVerb"
                                 app:layout_constraintRight_toRightOf="parent"
@@ -157,6 +135,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/clEjemploEs"
+                            android:layout_margin="0dp"
                             android:layout_marginBottom="8dp"
                             android:layout_marginEnd="8dp"
                             android:layout_marginLeft="8dp"
@@ -192,11 +171,12 @@
                                 android:layout_marginRight="8dp"
                                 android:layout_marginStart="8dp"
                                 android:layout_marginTop="8dp"
+                                android:maxLines="2"
                                 android:paddingLeft="10dp"
                                 android:paddingRight="15dp"
                                 android:textAlignment="textStart"
                                 android:textColor="#ddd"
-                                android:textSize="18sp"
+                                android:textSize="15sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintLeft_toRightOf="@+id/ivExampleVerb"
                                 app:layout_constraintRight_toRightOf="parent"
@@ -205,44 +185,7 @@
                         </android.support.constraint.ConstraintLayout>
                     </RelativeLayout>
 
-                    <ImageButton
-                        android:id="@+id/ibToggle"
-                        android:layout_width="21dp"
-                        android:layout_height="24dp"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginEnd="20dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginTop="8dp"
-                        android:adjustViewBounds="false"
-                        android:background="@android:color/transparent"
-                        android:contentDescription="@string/none"
-                        android:cropToPadding="false"
-                        android:elevation="0dp"
-                        android:scaleType="fitCenter"
-                        android:visibility="visible"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:ignore="RtlHardcoded" />
-
                 </android.support.constraint.ConstraintLayout>
-
-                <ImageView
-                    android:id="@+id/ivShowExamples"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginTop="8dp"
-                    android:elevation="24dp"
-                    android:padding="5dp"
-                    android:rotation="90"
-                    android:scaleType="centerCrop"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="@+id/tvWord"
-                    app:layout_constraintLeft_toRightOf="@+id/tvWord"
-                    app:layout_constraintTop_toTopOf="@+id/tvWord"
-                    app:srcCompat="@drawable/back_arrow" />
 
             </android.support.constraint.ConstraintLayout>
 
