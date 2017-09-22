@@ -55,5 +55,10 @@
     <string name="search">Buscar</string>
     <string name="introduce_word">Introduce una palabra</string>
 
+    <string name="select_word_from_favs">Seleccione una palabra de favoritos</string>
+    <string name="saved_in_fav">Guardado en favoritos</string>
+    <string name="deleted_from_favs">Eliminado de favoritos</string>
+    <string name="no_verbs_saved">No tienes verbos guardados</string>
+
 
 </resources>

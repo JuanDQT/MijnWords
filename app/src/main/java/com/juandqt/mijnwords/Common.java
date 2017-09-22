@@ -7,12 +7,17 @@ import android.content.SharedPreferences;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
+import com.juandqt.mijnwords.tools.CustomMigration;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 /**
  * Created by juandaniel on 7/8/17.
@@ -30,6 +35,13 @@ public class Common extends Application {
 
         this.context = getApplicationContext();
         allLanguages = instanceMapLanguages();
+        Realm.init(context);
+        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder().
+                                                    name("palabras").
+                                                    schemaVersion(2).
+                                                    migration(new CustomMigration()).
+                                                    build();
+        Realm.setDefaultConfiguration(realmConfiguration);
     }
 
     // Almacenamos las referencias de code idiomas en un map para ser accedido mas facilmente
@@ -120,21 +132,6 @@ public class Common extends Application {
         valueAnimator.start();
     }
 
-    // URL para subir erroes de ejemplos
-    public String getUrlHostReport() {
-
-        String jsonUrlFile = openJSON(FILE);
-        String url = "";
-        try {
-            JSONObject jsonUrl = new JSONObject(jsonUrlFile);
-            url = jsonUrl.getString("host_report");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return url.replace("\n", "").replace("\r", "");
-    }
-
     // Lenguaje del cual el usuario guardó como configuracion para ver los ejemplos en X lenguaje
     public static String getSystemLanguage() {
         String ln = "";
@@ -148,6 +145,9 @@ public class Common extends Application {
         }
 
         return ln;
+    }
 
+    public static String getBaseVerblanguage() {
+        return "ES";
     }
 }

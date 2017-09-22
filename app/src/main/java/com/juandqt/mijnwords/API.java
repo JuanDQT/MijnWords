@@ -19,6 +19,7 @@ import com.android.volley.toolbox.Volley;
 import com.juandqt.mijnwords.models.Ejemplo;
 import com.juandqt.mijnwords.models.ModoVerbo;
 import com.juandqt.mijnwords.models.Palabra;
+import com.juandqt.mijnwords.models.PalabraSearch;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,6 +29,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import io.realm.Realm;
 
 /**
  * Created by juandaniel on 7/8/17.
@@ -78,7 +81,7 @@ class API {
                 params.put("palabra", palabra);
                 params.put("lng_focus", Common.getSystemLanguage());
                 params.put("lng_base", "ES");
-                params.put("app_version", BuildConfig.VERSION_CODE + "");
+                params.put("app_version", "1");
                 return params;
             }
         };
@@ -270,6 +273,33 @@ class API {
         return palabra;
     }
 
+    static boolean checkIfWordIsInFav(String id) {
+        try (Realm realm = Realm.getDefaultInstance()) {
+            PalabraSearch palabraSearch = realm.where(PalabraSearch.class).equalTo("id", Integer.parseInt(id)).findFirst();
+            return palabraSearch != null;
+        }
+    }
 
+    static void saveWordToFav(String id, String palabra, String baseCodeLanguge) {
+        try (Realm realm = Realm.getDefaultInstance()) {
+            realm.beginTransaction();
+            PalabraSearch palabraSearch = realm.createObject(PalabraSearch.class, Integer.parseInt(id));
+            palabraSearch.setName(palabra);
+            palabraSearch.setLanguageCode(baseCodeLanguge);
+            realm.commitTransaction();
+        }
+    }
 
+    static void deleteWordFromFav(String id) {
+        try (Realm realm = Realm.getDefaultInstance()) {
+            PalabraSearch palabraSearch = realm.where(PalabraSearch.class).equalTo("id", Integer.parseInt(id)).findFirst();
+            realm.beginTransaction();
+            palabraSearch.deleteFromRealm();
+            realm.commitTransaction();
+        }
+    }
+
+    static ArrayList<PalabraSearch> getAllWordsFromHistoric(Realm realm) {
+        return new ArrayList<>(realm.where(PalabraSearch.class).findAll());
+    }
 }

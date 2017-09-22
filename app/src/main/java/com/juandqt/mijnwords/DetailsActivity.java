@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -19,8 +20,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.fujiyuu75.sequent.Sequent;
 import com.juandqt.mijnwords.fragments.FragmentModoCondicional;
 import com.juandqt.mijnwords.fragments.FragmentModoImperativo;
 import com.juandqt.mijnwords.fragments.FragmentModoIndicativo;
@@ -55,6 +56,7 @@ public class DetailsActivity extends AppCompatActivity {
     private ImageButton ibBack;
     private ImageView ivBaseVerb;
     private ImageView ivExampleVerb;
+    private ImageButton ibSave;
 
     private int indexVerb;
 
@@ -83,6 +85,7 @@ public class DetailsActivity extends AppCompatActivity {
         ibBack = (ImageButton) findViewById(R.id.ibBack);
         ivBaseVerb = (ImageView) findViewById(R.id.ivBaseVerb);
         ivExampleVerb = (ImageView) findViewById(R.id.ivExampleVerb);
+        ibSave = (ImageButton) findViewById(R.id.ibSave);
 
         Picasso.with(this).load(Common.allLanguages.get(Common.getSystemLanguage())).into(ivExampleVerb);
 
@@ -105,6 +108,21 @@ public class DetailsActivity extends AppCompatActivity {
             }
         });
 
+        ibSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (API.checkIfWordIsInFav(palabraId)) {
+                    Picasso.with(DetailsActivity.this).load(android.R.drawable.btn_star_big_off).into(ibSave);
+                    API.deleteWordFromFav(palabraId);
+                    Toast.makeText(DetailsActivity.this, getResources().getString(R.string.deleted_from_favs), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(DetailsActivity.this, getResources().getString(R.string.saved_in_fav), Toast.LENGTH_SHORT).show();
+                    Picasso.with(DetailsActivity.this).load(android.R.drawable.btn_star_big_on).into(ibSave);
+                    API.saveWordToFav(palabraId, palabra, Common.getBaseVerblanguage());
+                }
+            }
+        });
+
     }
 
     // Recibidor
@@ -112,12 +130,21 @@ public class DetailsActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, final Intent intent) {
 
+            // Checkeamos si existe
+            if (API.checkIfWordIsInFav(palabraId)) {
+                Log.e("RM", "existe!");
+                Picasso.with(DetailsActivity.this).load(android.R.drawable.btn_star_big_on).into(ibSave);
+            } else {
+                Log.e("RM", "no existe");
+                Picasso.with(DetailsActivity.this).load(android.R.drawable.btn_star_big_off).into(ibSave);
+            }
+
             pbLoading.setVisibility(View.GONE);
             clHeaderContent.setVisibility(View.VISIBLE);
             vpContent.setVisibility(View.VISIBLE);
 
             HashMap<String, Palabra> params = (HashMap<String, Palabra>) intent.getSerializableExtra("map");
-            tvWord.setText(palabra);
+            tvWord.setText(palabra.toUpperCase());
 
             final Palabra palabra = params.get("palabra");
 
@@ -171,7 +198,6 @@ public class DetailsActivity extends AppCompatActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            Sequent.origin(llError).start();
 
             int typeError = intent.getIntExtra("RESP", 0);
 
