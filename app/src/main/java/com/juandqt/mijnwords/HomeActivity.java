@@ -51,6 +51,7 @@ public class HomeActivity extends AppCompatActivity {
     private Button btnHistoric;
     private AlertDialog alertDialog;
 
+    //https://github.com/Tunous/SwipeActionView#license
     private ArrayList<PalabraSearch> list;
     private HistoricAdapter adapter;
 

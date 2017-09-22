@@ -2,9 +2,11 @@ package com.juandqt.mijnwords.fragments;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,8 @@ import android.widget.TextView;
 import com.juandqt.mijnwords.Common;
 import com.juandqt.mijnwords.R;
 import com.juandqt.mijnwords.models.ModoVerbo;
+
+import java.util.Locale;
 
 /**
  * Created by juandaniel on 17/8/17.
@@ -29,6 +33,7 @@ public class FragmentModoIndicativo extends Fragment implements View.OnClickList
     private int maxHeight = 0;
     private static final int DURATION_TRANSITION = 600;
     private ModoVerbo modoVerbo;
+    private TextToSpeech textToSpeech;
 
     @SuppressLint("ValidFragment")
     public FragmentModoIndicativo(ModoVerbo modoVerbo) {
@@ -63,8 +68,33 @@ public class FragmentModoIndicativo extends Fragment implements View.OnClickList
                 tvTiempo.setOnClickListener(this);
 
                 for (int j = 0; j < modoVerbo.getPresente().size(); j++) {
-                    TextView tvVerbo = (TextView) clTiempos.getChildAt(j + 1);
+                    final TextView tvVerbo = (TextView) clTiempos.getChildAt(j + 1);
                     tvVerbo.setText(modoVerbo.getAllTimes().get(index).get(j));
+
+                    tvVerbo.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            textToSpeech = new TextToSpeech(getContext(), new TextToSpeech.OnInitListener() {
+                                @Override
+                                public void onInit(int status) {
+
+                                    if (status == TextToSpeech.SUCCESS) {
+                                        Locale locSpanish = new Locale(Common.getBaseVerblanguage());
+                                        int result = textToSpeech.setLanguage(locSpanish);
+                                        // tts.setPitch(5); // set pitch level
+                                        // tts.setSpeechRate(2); // set speech speed rate
+                                        if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                                            Log.e("TTS", "Language is not supported");
+                                        } else {
+                                            textToSpeech.speak(tvVerbo.getText().toString(), TextToSpeech.QUEUE_FLUSH, null, null);
+                                        }
+
+
+                                    }
+                                }
+                            });
+                        }
+                    });
                 }
                 index++;
             }
