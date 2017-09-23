@@ -22,13 +22,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.juandqt.mijnwords.fragments.FragmentModoCondicional;
-import com.juandqt.mijnwords.fragments.FragmentModoImperativo;
-import com.juandqt.mijnwords.fragments.FragmentModoIndicativo;
-import com.juandqt.mijnwords.fragments.FragmentModoSubjuntivo;
-import com.juandqt.mijnwords.models.Palabra;
+import com.juandqt.mijnwords.fragments.FragmentModo;
+import com.juandqt.mijnwords.models.Word;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DetailsActivity extends AppCompatActivity {
@@ -143,12 +141,18 @@ public class DetailsActivity extends AppCompatActivity {
             clHeaderContent.setVisibility(View.VISIBLE);
             vpContent.setVisibility(View.VISIBLE);
 
-            HashMap<String, Palabra> params = (HashMap<String, Palabra>) intent.getSerializableExtra("map");
+            HashMap<String, Word> params = (HashMap<String, Word>) intent.getSerializableExtra("map");
             tvWord.setText(palabra.toUpperCase());
 
-            final Palabra palabra = params.get("palabra");
+            final Word palabra = params.get("palabra");
 
-            VerbsPageAdapter verbsPageAdapter = new VerbsPageAdapter(getSupportFragmentManager(), new Fragment[]{new FragmentModoIndicativo(palabra.getModoIndicativo()), new FragmentModoSubjuntivo(palabra.getModoSubjuntivo()), new FragmentModoCondicional(palabra.getModoCondicional()), new FragmentModoImperativo(palabra.getModoImperativo())});
+            int totalPages = palabra.getModos().size();
+            ArrayList<FragmentModo> fragments = new ArrayList<>();
+            for(int i = 0; i < totalPages; i++) {
+                fragments.add(new FragmentModo(palabra.getModos().get(i)));
+            }
+
+            VerbsPageAdapter verbsPageAdapter = new VerbsPageAdapter(getSupportFragmentManager(), fragments);
             vpContent.setAdapter(verbsPageAdapter);
 
             if (palabra.getEjemplo() == null) {
@@ -172,11 +176,6 @@ public class DetailsActivity extends AppCompatActivity {
 
                     }
                 });
-
-
-                // https://www.android-arsenal.com/details/1/5828
-//                Sequent.origin(clEjemploEs).start();
-
             }
 
         }
@@ -245,21 +244,21 @@ public class DetailsActivity extends AppCompatActivity {
 
     class VerbsPageAdapter extends FragmentPagerAdapter {
 
-        private Fragment[] pages;
+        private ArrayList<FragmentModo> pages;
 
-        public VerbsPageAdapter(FragmentManager fm, Fragment[] pages) {
+        public VerbsPageAdapter(FragmentManager fm, ArrayList<FragmentModo> pages) {
             super(fm);
             this.pages = pages;
         }
 
         @Override
         public Fragment getItem(int position) {
-            return pages[position];
+            return pages.get(position);
         }
 
         @Override
         public int getCount() {
-            return pages.length;
+            return pages.size();
         }
     }
 

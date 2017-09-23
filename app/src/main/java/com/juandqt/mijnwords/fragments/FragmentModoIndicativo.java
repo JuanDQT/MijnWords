@@ -10,12 +10,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.juandqt.mijnwords.Common;
 import com.juandqt.mijnwords.R;
+import com.juandqt.mijnwords.models.Modo;
 import com.juandqt.mijnwords.models.ModoVerbo;
 
 import java.util.Locale;
@@ -35,20 +35,23 @@ public class FragmentModoIndicativo extends Fragment implements View.OnClickList
     private ModoVerbo modoVerbo;
     private TextToSpeech textToSpeech;
 
+
+
     @SuppressLint("ValidFragment")
-    public FragmentModoIndicativo(ModoVerbo modoVerbo) {
+    public FragmentModoIndicativo(Modo modos) {
         this.modoVerbo = modoVerbo;
+        Log.e("NVS", "lokita me creaste");
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
+        Log.e("NVS", "con el valor: " + modoVerbo.getPresente().size());
         view = LayoutInflater.from(getActivity()).inflate(R.layout.fragent_modo_indicativo, null);
 
         RelativeLayout rlModo = (RelativeLayout) view.findViewById(R.id.RlModoIndicativo);
 
-        constraintLayout = (ConstraintLayout) view.findViewById(R.id.a1);
+/*        constraintLayout = (ConstraintLayout) view.findViewById(R.id.a1);
 
         ViewTreeObserver vto = constraintLayout.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -58,7 +61,7 @@ public class FragmentModoIndicativo extends Fragment implements View.OnClickList
                 maxHeight = constraintLayout.getMeasuredHeight();
 
             }
-        });
+        });*/
 
         for (int i = 0, index = 0; i < rlModo.getChildCount(); i++) {
             // Primer resultado + onClick

@@ -17,17 +17,18 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.juandqt.mijnwords.models.Ejemplo;
-import com.juandqt.mijnwords.models.ModoVerbo;
-import com.juandqt.mijnwords.models.Palabra;
+import com.juandqt.mijnwords.models.Modo;
 import com.juandqt.mijnwords.models.PalabraSearch;
+import com.juandqt.mijnwords.models.Verbo;
+import com.juandqt.mijnwords.models.Word;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import io.realm.Realm;
@@ -52,9 +53,9 @@ class API {
             public void onResponse(String response) {
 
                 Intent intent = new Intent("SUCCESS");
-                HashMap<String, Palabra> params = new HashMap<>();
+                HashMap<String, Word> params = new HashMap<>();
 
-                Palabra palabra = getData(response);
+                Word palabra = getData(response);
 
                 if (palabra == null) {
                     LocalBroadcastManager.getInstance(Common.context).sendBroadcast(new Intent("UPDATE"));
@@ -81,7 +82,7 @@ class API {
                 params.put("palabra", palabra);
                 params.put("lng_focus", Common.getSystemLanguage());
                 params.put("lng_base", "ES");
-                params.put("app_version", "1");
+                params.put("app_version", "3");
                 return params;
             }
         };
@@ -117,13 +118,11 @@ class API {
     }
 
     // Devolvemos el objeto Palabra como resultado al movil.
-    static Palabra getData(String json) {
+    static Word getData(String json) {
 
-        Palabra palabra = new Palabra();
+        Word palabra = new Word();
 
-        JSONObject verbosJSON = new JSONObject();
-        Iterator<?> keys = null;
-        ModoVerbo modoverbo = new ModoVerbo();
+        // TODO: Adaptar json nuevo!!
 
         // Cogemos el titulo
         try {
@@ -161,110 +160,37 @@ class API {
 
             }
 
-            JSONObject modoIndicativoJSON = jsonRoot.getJSONObject("modo_indicativo");
+            // Buscamos todas sus modos:
 
-            // Presente
-            ArrayList<String> miPresente = new ArrayList<>();
-            for (int i = 0; i < modoIndicativoJSON.getJSONArray("presente").length(); i++) {
-                miPresente.add(modoIndicativoJSON.getJSONArray("presente").getString(i));
+            JSONArray jsonModos = jsonRoot.getJSONArray("modos");
+
+            // Recogemos todos los verbos del modo
+            for (int i = 0; i < jsonModos.length(); i++) {
+                JSONArray verbContainer = jsonModos.getJSONObject(i).getJSONArray("verbs");
+                // Iteramos la array que contiene los verbos(2,4)
+
+                Modo modo = new Modo();
+                // Tiem;os
+                String title = jsonModos.getJSONObject(i).getString("title");
+                modo.setTitle(title);
+                String times = jsonModos.getJSONObject(i).getString("times");
+                String timesArray[] = times.split(",");
+                String persons = jsonModos.getJSONObject(i).getString("persons");
+                modo.setPersons(Arrays.asList(persons.split(",")));
+
+                for (int j = 0; j < verbContainer.length(); j++) {
+                    JSONArray arrayVerb = verbContainer.getJSONArray(j);
+                    Verbo verbo = new Verbo();
+                    verbo.setTiempo(timesArray[j]);// JSON get tiempo position
+                    //Iteramos cada uno de los verbos y los guardamos
+                    for (int k = 0; k < arrayVerb.length(); k++) {
+                        String verboResult = (String) arrayVerb.get(k);
+                        verbo.addVerb(verboResult);
+                    }
+                    modo.addVerbo(verbo);
+                }
+                palabra.addModo(modo);
             }
-            modoverbo.setTiempo(Common.getContext().getResources().getString(R.string.presente));
-            modoverbo.setPresente(miPresente);
-
-            // Preterito_imperfecto
-            ArrayList<String> miPimperfecto = new ArrayList<>();
-            for (int i = 0; i < modoIndicativoJSON.getJSONArray("preterito_imperfecto").length(); i++) {
-                miPimperfecto.add(modoIndicativoJSON.getJSONArray("preterito_imperfecto").getString(i));
-            }
-            modoverbo.setTiempo(Common.getContext().getResources().getString(R.string.preterito_imperfecto));
-            modoverbo.setPreteritoImperfecto(miPimperfecto);
-
-            // Preterito indefinido
-
-            ArrayList<String> miPIndefinido = new ArrayList<>();
-            for (int i = 0; i < modoIndicativoJSON.getJSONArray("preterito_indefinido").length(); i++) {
-                miPIndefinido.add(modoIndicativoJSON.getJSONArray("preterito_indefinido").getString(i));
-            }
-
-            modoverbo.setTiempo(Common.getContext().getResources().getString(R.string.preterito_indefinido));
-            modoverbo.setPreteritoIndefinido(miPIndefinido);
-
-            // Futuro
-            ArrayList<String> miFuturo = new ArrayList<>();
-            for (int i = 0; i < modoIndicativoJSON.getJSONArray("futuro").length(); i++) {
-                miFuturo.add(modoIndicativoJSON.getJSONArray("futuro").getString(i));
-            }
-            modoverbo.setTiempo(Common.getContext().getResources().getString(R.string.futuro));
-            modoverbo.setFuturo(miFuturo);
-
-            palabra.setModoIndicativo(modoverbo);
-
-            // MARK: - Modo subjuntivo
-
-            modoverbo = new ModoVerbo();
-
-            JSONObject modoSubjuntivo = jsonRoot.getJSONObject("modo_subjuntivo");
-            ArrayList<String> msPresente = new ArrayList<>();
-            for (int i = 0; i < modoSubjuntivo.getJSONArray("presente").length(); i++) {
-                msPresente.add(modoSubjuntivo.getJSONArray("presente").getString(i));
-            }
-            modoverbo.setTiempo(Common.getContext().getResources().getString(R.string.presente));
-            modoverbo.setPresente(msPresente);
-
-            ArrayList<String> msPimperfecto = new ArrayList<>();
-            for (int i = 0; i < modoSubjuntivo.getJSONArray("preterito_imperfecto").length(); i++) {
-                msPimperfecto.add(modoSubjuntivo.getJSONArray("preterito_imperfecto").getString(i));
-            }
-            modoverbo.setTiempo(Common.getContext().getResources().getString(R.string.preterito_imperfecto));
-            modoverbo.setPreteritoImperfecto(msPimperfecto);
-
-            ArrayList<String> msFuturo = new ArrayList<>();
-            for (int i = 0; i < modoSubjuntivo.getJSONArray("futuro").length(); i++) {
-                msFuturo.add(modoSubjuntivo.getJSONArray("futuro").getString(i));
-            }
-            modoverbo.setTiempo(Common.getContext().getResources().getString(R.string.futuro));
-            modoverbo.setFuturo(msFuturo);
-
-            palabra.setModoSubjuntivo(modoverbo);
-
-
-            // MARK: - Modo Condicional
-
-            modoverbo = new ModoVerbo();
-
-            JSONObject modoCondicional = jsonRoot.getJSONObject("modo_condicional");
-
-            ArrayList<String> mcCondicional = new ArrayList<>();
-            for (int i = 0; i < modoCondicional.getJSONArray("condicional").length(); i++) {
-                mcCondicional.add(modoCondicional.getJSONArray("condicional").getString(i));
-            }
-            modoverbo.setTiempo(Common.getContext().getResources().getString(R.string.condicional));
-            modoverbo.setCondicional(mcCondicional);
-
-            palabra.setModoCondicional(modoverbo);
-
-            // MARK: - Modo Imperativo
-
-            modoverbo = new ModoVerbo();
-
-            JSONObject modoImperativo = jsonRoot.getJSONObject("modo_imperativo");
-
-            ArrayList<String> miAfirmativo = new ArrayList<>();
-            for (int i = 0; i < modoImperativo.getJSONArray("afirmativo").length(); i++) {
-                miAfirmativo.add(modoImperativo.getJSONArray("afirmativo").getString(i));
-            }
-            modoverbo.setTiempo(Common.getContext().getResources().getString(R.string.afirmativo));
-            modoverbo.setAfirmativo(miAfirmativo);
-
-            ArrayList<String> miNegativo = new ArrayList<>();
-            for (int i = 0; i < modoImperativo.getJSONArray("negativo").length(); i++) {
-                miNegativo.add(modoImperativo.getJSONArray("negativo").getString(i));
-            }
-            modoverbo.setTiempo(Common.getContext().getResources().getString(R.string.negativo));
-            modoverbo.setNegativo(miNegativo);
-
-            palabra.setModoImperativo(modoverbo);
-
 
         } catch (JSONException e) {
             e.printStackTrace();

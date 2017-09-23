@@ -8,7 +8,9 @@ import java.util.ArrayList;
 
 public class ModoVerbo {
 
+    // No used
     private String tiempo;
+
     private ArrayList<String> presente;
     private ArrayList<String> preteritoImperfecto;
     private ArrayList<String> preteritoIndefinido;
@@ -38,7 +40,7 @@ public class ModoVerbo {
     }
 
     public void setTiempo(String tiempo) {
-        this.tiempo = tiempo;
+        this.tiempo = "";
     }
 
     public ArrayList<String> getPresente() {
