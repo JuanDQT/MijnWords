@@ -51,7 +51,6 @@ class API {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, host, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-
                 Intent intent = new Intent("SUCCESS");
                 HashMap<String, Word> params = new HashMap<>();
 
@@ -78,7 +77,6 @@ class API {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("id", id);
-                params.put("os", "android");
                 params.put("palabra", palabra);
                 params.put("lng_focus", Common.getSystemLanguage());
                 params.put("lng_base", "ES");
@@ -117,12 +115,10 @@ class API {
 
     }
 
-    // Devolvemos el objeto Palabra como resultado al movil.
+    // Devolvemos el objeto como resultado al movil.
     static Word getData(String json) {
 
         Word palabra = new Word();
-
-        // TODO: Adaptar json nuevo!!
 
         // Cogemos el titulo
         try {

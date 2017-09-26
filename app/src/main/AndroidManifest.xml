@@ -33,7 +33,6 @@
             android:name=".UpdateAppActivity"
             android:screenOrientation="portrait"
             android:theme="@style/FullScreen" />
-        <activity android:name=".DebugOnly"></activity>
     </application>
 
 </manifest>

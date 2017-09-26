@@ -21,7 +21,6 @@ public class PalabraSearch extends RealmObject {
     private Date date;
 
     public PalabraSearch() {
-        Log.e("RM", "me han llamado!!");
         this.date = new Date();
     }
 

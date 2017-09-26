@@ -19,4 +19,8 @@
     <string name="try_later">Probeer later opnieuw</string>
     <string name="verbs_in">Werkwoorden in</string>
     <string name="no_language_available">Binnenkort worden meer talen toegevoegd</string>
+    <string name="select_word_from_favs">Selecteer een favoriet woord</string>
+    <string name="saved_in_fav">Opslaan in favorieten</string>
+    <string name="deleted_from_favs">Uit favorieten verwijderen</string>
+    <string name="no_verbs_saved">Je hebt geen werkwoorden opgeslagen</string>
 </resources>

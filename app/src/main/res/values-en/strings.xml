@@ -19,4 +19,8 @@
     <string name="try_later">Try again later</string>
     <string name="verbs_in">Verbs in</string>
     <string name="no_language_available">Soon more languages will be introduced</string>
+    <string name="select_word_from_favs">Select a favourite word</string>
+    <string name="saved_in_fav">Save in favourites</string>
+    <string name="deleted_from_favs">Delete from favourites</string>
+    <string name="no_verbs_saved">You do not have verbs saved</string>
 </resources>

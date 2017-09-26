@@ -31,11 +31,4 @@ public class Verbo {
         return verbs;
     }
 
-    @Override
-    public String toString() {
-        return "Verbo{" +
-                "tiempo='" + tiempo + '\'' +
-                ", verbs=" + verbs +
-                '}';
-    }
 }

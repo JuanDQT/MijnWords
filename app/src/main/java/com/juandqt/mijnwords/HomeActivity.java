@@ -9,7 +9,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,8 +26,6 @@ import com.juandqt.mijnwords.adapters.SpinnerLanguageAdapter;
 import com.juandqt.mijnwords.models.PalabraSearch;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.InputStream;
@@ -59,9 +56,6 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
-        // TODO: DEGUG
-//        startActivity(new Intent(this, DebugOnly.class));
 
         // Leemos
         final InputStream inputStream = getResources().openRawResource(R.raw.palabras); // getting JSON
@@ -151,7 +145,7 @@ public class HomeActivity extends AppCompatActivity {
                 // Check if the input is not empty
                 if (palabra.length() > 0) {
 
-                    String id = getIdByPalabra(jsonString, palabra);
+                    String id = Common.getIdByPalabra(jsonString, palabra);
 
                     // Check if the response of the key exist
                     if (id.length() > 0) {
@@ -200,7 +194,6 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void selectedWord(String palabra) {
-        Log.e("DBS", palabra);
         alertDialog.hide();
         mInput.setText(palabra);
         mBuscar.performClick();
@@ -213,49 +206,6 @@ public class HomeActivity extends AppCompatActivity {
         if (this.list.size() == 0) {
             this.alertDialog.hide();
         }
-
     }
-
-    // Comprobamos si la palabra existe en el JSON file
-    public String getIdByPalabra(String json, String palabra) {
-
-        String id = "";
-
-        try {
-            jsonFile = new JSONObject(json);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        // Iterar sobre las letras
-
-        if (palabra.charAt(0) >= 'a' && palabra.charAt(0) <= 'z' || palabra.charAt(0) >= 'A' && palabra.charAt(0) <= 'Z') {
-
-            try {
-
-                String firstLetra = palabra.toUpperCase().charAt(0) + "";
-
-                // Si es numero o ~234.. etc, de esta linea pasa a la excepcion
-                JSONArray letraJSON = jsonFile.getJSONArray(firstLetra);
-
-                for (int i = 0; i < letraJSON.length(); i++) {
-                    JSONObject row = letraJSON.getJSONObject(i);
-                    String key = row.keys().next();
-
-                    if (row.getString(key).equals(palabra.toLowerCase())) {
-                        id = key;
-                    }
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        }
-
-
-        return id;
-    }
-
 
 }

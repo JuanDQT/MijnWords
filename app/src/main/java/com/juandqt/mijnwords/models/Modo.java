@@ -26,13 +26,6 @@ public class Modo {
         this.allVerbs.add(verbo);
     }
 
-    @Override
-    public String toString() {
-        return "Modo{" +
-                "allVerbs=" + allVerbs +
-                '}';
-    }
-
     public String getTitle() {
         return title;
     }

@@ -11,7 +11,7 @@
     <string name="title_error" translatable="false">Ops!</string>
 
     <string name="credits">Créditos</string>
-    <string name="version" translatable="false">Versión 0.3</string>
+    <string name="version" translatable="false">Versión 0.4</string>
     <string name="icons">Iconos</string>
     <string name="translations">Traducciones</string>
     <string name="cancel">Cancelar</string>

@@ -12,7 +12,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -130,10 +129,8 @@ public class DetailsActivity extends AppCompatActivity {
 
             // Checkeamos si existe
             if (API.checkIfWordIsInFav(palabraId)) {
-                Log.e("RM", "existe!");
                 Picasso.with(DetailsActivity.this).load(android.R.drawable.btn_star_big_on).into(ibSave);
             } else {
-                Log.e("RM", "no existe");
                 Picasso.with(DetailsActivity.this).load(android.R.drawable.btn_star_big_off).into(ibSave);
             }
 

@@ -51,10 +51,9 @@ public class FragmentModo extends Fragment implements View.OnClickListener {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = (ScrollView) LayoutInflater.from(getActivity()).inflate(R.layout.fragent_modo_indicativo, null);
+        view = (ScrollView) LayoutInflater.from(getActivity()).inflate(R.layout.fragent_modo, null);
 
         RelativeLayout rlModo = (RelativeLayout) view.getChildAt(0);
-//        rlModo.setBackgroundColor(Color.BLACK);
         TextView tvModo = (TextView) rlModo.getChildAt(0);
         tvModo.setText(modo.getTitle());
 
@@ -115,7 +114,6 @@ public class FragmentModo extends Fragment implements View.OnClickListener {
             }
 
             for (int k = 0; k < modo.getAllVerbs().get(i).getVerbs().size(); k++) {
-                Log.e("SAPE", modo.getPersons().get(k) + " " + modo.getAllVerbs().get(i).getVerbs().get(k));
 
                 // TextView verbo
                 final TextView tvVerb = new TextView(getContext());

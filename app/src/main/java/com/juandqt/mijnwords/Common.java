@@ -9,6 +9,7 @@ import android.view.animation.DecelerateInterpolator;
 
 import com.juandqt.mijnwords.tools.CustomMigration;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,10 +38,10 @@ public class Common extends Application {
         allLanguages = instanceMapLanguages();
         Realm.init(context);
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder().
-                                                    name("palabras").
-                                                    schemaVersion(2).
-                                                    migration(new CustomMigration()).
-                                                    build();
+                name("palabras").
+                schemaVersion(2).
+                migration(new CustomMigration()).
+                build();
         Realm.setDefaultConfiguration(realmConfiguration);
     }
 
@@ -150,4 +151,45 @@ public class Common extends Application {
     public static String getBaseVerblanguage() {
         return "ES";
     }
+
+    public static String getIdByPalabra(String json, String palabra) {
+
+        String id = "";
+
+        try {
+            JSONObject jsonFile = new JSONObject(json);
+
+            // Iterar sobre las letras
+
+            if (palabra.charAt(0) >= 'a' && palabra.charAt(0) <= 'z' || palabra.charAt(0) >= 'A' && palabra.charAt(0) <= 'Z') {
+
+                try {
+
+                    String firstLetra = palabra.toUpperCase().charAt(0) + "";
+
+                    // Si es numero o ~234.. etc, de esta linea pasa a la excepcion
+                    JSONArray letraJSON = jsonFile.getJSONArray(firstLetra);
+
+                    for (int i = 0; i < letraJSON.length(); i++) {
+                        JSONObject row = letraJSON.getJSONObject(i);
+                        String key = row.keys().next();
+
+                        if (row.getString(key).equals(palabra.toLowerCase())) {
+                            id = key;
+                        }
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        return id;
+    }
+
 }
