@@ -60,6 +60,9 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        // TODO: DEGUG
+//        startActivity(new Intent(this, DebugOnly.class));
+
         // Leemos
         final InputStream inputStream = getResources().openRawResource(R.raw.palabras); // getting JSON
 

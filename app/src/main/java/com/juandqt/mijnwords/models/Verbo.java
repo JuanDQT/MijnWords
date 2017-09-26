@@ -27,6 +27,10 @@ public class Verbo {
         return this.tiempo;
     }
 
+    public ArrayList<String> getVerbs() {
+        return verbs;
+    }
+
     @Override
     public String toString() {
         return "Verbo{" +
