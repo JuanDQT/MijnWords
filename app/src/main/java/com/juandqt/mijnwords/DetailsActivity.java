@@ -41,7 +41,6 @@ public class DetailsActivity extends AppCompatActivity {
     private String palabra;
 
     // Layouts
-    private ConstraintLayout clHeaderContent;
     private ViewPager vpContent;
     private ConstraintLayout clEjemplos;
     private ConstraintLayout clEjemploEs;
@@ -74,7 +73,6 @@ public class DetailsActivity extends AppCompatActivity {
         tvEjemploEs = (TextView) findViewById(R.id.tvEjemploEs);
         tvEjemploNl = (TextView) findViewById(R.id.tvEjemploNl);
 
-        clHeaderContent = (ConstraintLayout) findViewById(R.id.clContent);
         vpContent = (ViewPager) findViewById(R.id.vpContent);
         clEjemplos = (ConstraintLayout) findViewById(R.id.clEjemplos);
         clEjemploEs = (ConstraintLayout) findViewById(R.id.clEjemploEs);
@@ -135,7 +133,6 @@ public class DetailsActivity extends AppCompatActivity {
             }
 
             pbLoading.setVisibility(View.GONE);
-            clHeaderContent.setVisibility(View.VISIBLE);
             vpContent.setVisibility(View.VISIBLE);
 
             HashMap<String, Word> params = (HashMap<String, Word>) intent.getSerializableExtra("map");
@@ -156,9 +153,9 @@ public class DetailsActivity extends AppCompatActivity {
 //                Toast.makeText(context, "No hay ejemplos", Toast.LENGTH_SHORT).show();
                 //No hay ejemplos
             } else {
+                clEjemplos.setVisibility(View.VISIBLE);
 
                 // Un ejemplo en espanol
-                clEjemplos.setVisibility(View.VISIBLE);
                 tvEjemploEs.setText(palabra.getEjemplo().getEjemplosEs().get(0));
                 tvEjemploNl.setText(palabra.getEjemplo().getEjemplosNl().get(0));
 
@@ -176,6 +173,7 @@ public class DetailsActivity extends AppCompatActivity {
             }
 
         }
+
 
 
     };
