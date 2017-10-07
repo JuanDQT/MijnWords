@@ -37,11 +37,11 @@ public class FragmentModo extends Fragment implements View.OnClickListener {
     private Modo modo;
     private TextToSpeech textToSpeech;
     private static final int MAX_HEIGHT_TEXTVIEW = 75;
-    private static final int MAX_MARGIN_TOP_TEXTVIEW = 35;
+    private static final int MAX_MARGIN_TOP_TEXTVIEW = 20;
     private static final int MAX_MARGIN_LEFT_RIGHT_TEXTVIEW = 75;
     private static final int FONT_SIZE_TEXTVIEW = 18;
     private static int maxScrollHeight = 0;
-    private static final int MIN_SCROLL_HEIGHT = 150;
+    private static final int MIN_SCROLL_HEIGHT = 100;
 
     @SuppressLint("ValidFragment")
     public FragmentModo(Modo modo) {
@@ -58,14 +58,19 @@ public class FragmentModo extends Fragment implements View.OnClickListener {
         tvModo.setText(modo.getTitle());
 
         int maxHeight = 0;
+        // debug
+        final TextView textView = new TextView(getContext());
+        textView.setTextSize(Dimension.SP, FONT_SIZE_TEXTVIEW);
+        int sizeDebug = textView.getLineHeight();
+        //
+        maxScrollHeight = MIN_SCROLL_HEIGHT + (modo.getPersons().size() * sizeDebug) + (modo.getPersons().size() * MAX_MARGIN_TOP_TEXTVIEW) + MAX_MARGIN_TOP_TEXTVIEW;
+
         for (int i = 0; i < modo.getAllVerbs().size(); i++) {
 
             ConstraintLayout clRow = new ConstraintLayout(getContext());
             ConstraintSet constraintSetTime = new ConstraintSet();
             clRow.setId(View.generateViewId());
             clRow.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-
-            maxScrollHeight = MIN_SCROLL_HEIGHT + (modo.getPersons().size() * MAX_HEIGHT_TEXTVIEW) + (modo.getPersons().size() * MAX_MARGIN_TOP_TEXTVIEW) + MAX_MARGIN_TOP_TEXTVIEW;
 
             maxHeight = (i == 0) ? maxScrollHeight : MIN_SCROLL_HEIGHT;
 
@@ -83,6 +88,7 @@ public class FragmentModo extends Fragment implements View.OnClickListener {
             tvTiempo.setText(modo.getAllVerbs().get(i).getTiempo());
             tvTiempo.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
             tvTiempo.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            tvTiempo.setTextSize(Dimension.SP, 20);
             tvTiempo.setTextColor(Color.WHITE);
             tvTiempo.setGravity(Gravity.CENTER);
             tvTiempo.setOnClickListener(this);
@@ -102,11 +108,12 @@ public class FragmentModo extends Fragment implements View.OnClickListener {
                 tvPerson.setText(modo.getPersons().get(k));
                 tvPerson.setTextColor(Color.WHITE);
                 tvPerson.setTextSize(Dimension.SP, FONT_SIZE_TEXTVIEW);
+
                 tvPerson.setGravity(View.TEXT_ALIGNMENT_CENTER);
                 clRow.addView(tvPerson);
 
                 constraintSetTime.constrainWidth(tvPerson.getId(), ConstraintSet.WRAP_CONTENT);
-                constraintSetTime.constrainHeight(tvPerson.getId(), MAX_HEIGHT_TEXTVIEW);
+                constraintSetTime.constrainHeight(tvPerson.getId(), sizeDebug);
                 constraintSetTime.connect(tvPerson.getId(), ConstraintSet.TOP, clRow.getChildAt(k).getId(), ConstraintSet.BOTTOM, MAX_MARGIN_TOP_TEXTVIEW);
                 constraintSetTime.connect(tvPerson.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT);
                 constraintSetTime.setMargin(tvPerson.getId(), ConstraintSet.START, MAX_MARGIN_LEFT_RIGHT_TEXTVIEW);
@@ -145,16 +152,21 @@ public class FragmentModo extends Fragment implements View.OnClickListener {
                                     if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                                         Log.e("TTS", "Language is not supported");
                                     } else {
-                                        textToSpeech.speak(tvVerb.getText().toString(), TextToSpeech.QUEUE_FLUSH, null, null);
+
+                                        if (!textToSpeech.isSpeaking()){
+                                            textToSpeech.speak(tvVerb.getText().toString(), TextToSpeech.QUEUE_FLUSH, null, null);
+                                        }
                                     }
 
 
                                 }
                             }
                         });
+
                     }
                 });
             }
+
             clRow.setConstraintSet(constraintSetTime);
         }
 
