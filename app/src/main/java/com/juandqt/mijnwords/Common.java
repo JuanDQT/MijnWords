@@ -39,7 +39,7 @@ public class Common extends Application {
         Realm.init(context);
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder().
                 name("palabras").
-                schemaVersion(2).
+                schemaVersion(3).
                 migration(new CustomMigration()).
                 build();
         Realm.setDefaultConfiguration(realmConfiguration);
@@ -134,22 +134,28 @@ public class Common extends Application {
     }
 
     // Lenguaje del cual el usuario guardó como configuracion para ver los ejemplos en X lenguaje
-    public static String getSystemLanguage() {
+    public static String getExampleLanguage() {
         String ln = "";
         SharedPreferences sharedPreferences = context.getSharedPreferences("SP", Context.MODE_PRIVATE);
         if (sharedPreferences.contains("LN")) {
             // cargamos del sh
             ln = sharedPreferences.getString("LN", "EN");
         } else {
-
             ln = "EN";
         }
 
         return ln;
     }
 
-    public static String getBaseVerblanguage() {
-        return "ES";
+    public static String getBaseLanguage() {
+        String ln = "";
+        SharedPreferences sharedPreferences = context.getSharedPreferences("SP", Context.MODE_PRIVATE);
+        if (sharedPreferences.contains("BL")) {
+            ln = sharedPreferences.getString("BL", "ES");
+        } else {
+            ln = "ES";
+        }
+        return ln;
     }
 
     public static String getIdByPalabra(String json, String palabra) {

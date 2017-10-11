@@ -41,7 +41,6 @@ public class HistoricAdapter extends RecyclerView.Adapter<HistoricAdapter.Palabr
     @Override
     public void onBindViewHolder(PalabraViewHolder holder, final int position) {
         holder.tvVerbo.setText(list.get(position).getName());
-        holder.tvIdWord.setText(list.get(position).getId() + "");
 
         SwipeActionView swipeView = (SwipeActionView) holder.itemView.findViewById(R.id.savItem);
         
@@ -56,8 +55,9 @@ public class HistoricAdapter extends RecyclerView.Adapter<HistoricAdapter.Palabr
         swipeView.setSwipeGestureListener(new SwipeGestureListener() {
             @Override
             public boolean onSwipedLeft(@NotNull SwipeActionView swipeActionView) {
-                TextView tvIdWord = (TextView) swipeActionView.findViewById(R.id.tvIdWord);
-                ((HomeActivity)context).removeVerbHistory(position, tvIdWord.getText().toString());
+                // TODO: remover con el name
+//                TextView tvIdWord = (TextView) swipeActionView.findViewById(R.id.tvIdWord);
+//                ((HomeActivity)context).removeVerbHistory(position, tvIdWord.getText().toString());
                 return true;
             }
 
@@ -74,11 +74,9 @@ public class HistoricAdapter extends RecyclerView.Adapter<HistoricAdapter.Palabr
 
     class PalabraViewHolder extends RecyclerView.ViewHolder {
         private TextView tvVerbo;
-        private TextView tvIdWord;
         public PalabraViewHolder(View itemView) {
             super(itemView);
             tvVerbo = (TextView) itemView.findViewById(R.id.tvVerb);
-            tvIdWord = (TextView) itemView.findViewById(R.id.tvIdWord);
         }
     }
 

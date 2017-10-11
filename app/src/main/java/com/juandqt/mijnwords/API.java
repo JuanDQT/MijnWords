@@ -3,6 +3,7 @@ package com.juandqt.mijnwords;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
@@ -43,7 +44,7 @@ class API {
     // MARK: - Descargamos los datos de la pagina y se lo enviamos al servidor
 
 
-    static void getResultados(final Context context, final String id, final String palabra) {
+    static void getResultados(final Context context, final String palabra) {
         // Instantiate the RequestQueue.
         final RequestQueue queue = Volley.newRequestQueue(context);
         final String host = new Common().getHostURL();
@@ -53,7 +54,7 @@ class API {
             public void onResponse(String response) {
                 Intent intent = new Intent("SUCCESS");
                 HashMap<String, Word> params = new HashMap<>();
-
+                Log.e("PIP", response);
                 Word palabra = getData(response);
 
                 if (palabra == null) {
@@ -76,11 +77,10 @@ class API {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("id", id);
                 params.put("palabra", palabra);
-                params.put("lng_focus", Common.getSystemLanguage());
-                params.put("lng_base", "ES");
-                params.put("app_version", "3");
+                params.put("lng_focus", Common.getExampleLanguage());
+                params.put("lng_base", Common.getBaseLanguage().toLowerCase());
+                params.put("app_version", "4");
                 return params;
             }
         };
@@ -190,32 +190,34 @@ class API {
 
         } catch (JSONException e) {
             e.printStackTrace();
+            e.printStackTrace();
         }
 
         return palabra;
     }
 
-    static boolean checkIfWordIsInFav(String id) {
+    static boolean checkIfWordIsInFav(String word) {
         try (Realm realm = Realm.getDefaultInstance()) {
-            PalabraSearch palabraSearch = realm.where(PalabraSearch.class).equalTo("id", Integer.parseInt(id)).findFirst();
+            PalabraSearch palabraSearch = realm.where(PalabraSearch.class).equalTo("name", word).findFirst();
             return palabraSearch != null;
         }
     }
 
-    static void saveWordToFav(String id, String palabra, String baseCodeLanguge) {
+    static void saveWordToFav(String palabra, String baseCodeLanguge) {
         try (Realm realm = Realm.getDefaultInstance()) {
             realm.beginTransaction();
-            PalabraSearch palabraSearch = realm.createObject(PalabraSearch.class, Integer.parseInt(id));
+            PalabraSearch palabraSearch = realm.createObject(PalabraSearch.class);
             palabraSearch.setName(palabra);
             palabraSearch.setLanguageCode(baseCodeLanguge);
             realm.commitTransaction();
         }
     }
 
-    static void deleteWordFromFav(String id) {
+    static void deleteWordFromFav(String word) {
         try (Realm realm = Realm.getDefaultInstance()) {
-            PalabraSearch palabraSearch = realm.where(PalabraSearch.class).equalTo("id", Integer.parseInt(id)).findFirst();
+            PalabraSearch palabraSearch = realm.where(PalabraSearch.class).equalTo("name", word).findFirst();
             realm.beginTransaction();
+            // TODO: check?
             palabraSearch.deleteFromRealm();
             realm.commitTransaction();
         }

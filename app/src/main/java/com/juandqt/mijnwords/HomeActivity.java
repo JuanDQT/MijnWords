@@ -28,9 +28,7 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import io.realm.Realm;
 
@@ -57,21 +55,17 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        // Leemos
-        final InputStream inputStream = getResources().openRawResource(R.raw.palabras); // getting JSON
-
-        Scanner s = new Scanner(inputStream).useDelimiter("\\A");
-        final String jsonString = s.hasNext() ? s.next() : "";
-
         mContext = this.getApplicationContext();
         mBuscar = (Button) findViewById(R.id.btnBuscar);
         mInput = (EditText) findViewById(R.id.etBuscar);
         ivInfo = (ImageView) findViewById(R.id.ivInfo);
         ivlanguage = (ImageView) findViewById(R.id.ivLanguage);
+        ivBaseLanguage = (ImageView) findViewById(R.id.ivBaseLanguage);
         ivExampleLanguage = (ImageView) findViewById(R.id.ivExampleLanguage);
         btnHistoric = (Button) findViewById(R.id.btnHistoric);
 
-        Picasso.with(this).load(Common.allLanguages.get(Common.getSystemLanguage())).into(ivExampleLanguage);
+        Picasso.with(this).load(Common.allLanguages.get(Common.getExampleLanguage())).into(ivExampleLanguage);
+        Picasso.with(this).load(Common.allLanguages.get(Common.getBaseLanguage())).into(ivBaseLanguage);
 
         mInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -104,14 +98,14 @@ public class HomeActivity extends AppCompatActivity {
                 final Spinner spBaseLanguage = (Spinner) vLanguages.findViewById(R.id.spBaseLanguage);
                 final Spinner spExampleLanguage = (Spinner) vLanguages.findViewById(R.id.spExamplesLanguage);
 
-                final SpinnerLanguageAdapter spAdapterBaseLanguage = new SpinnerLanguageAdapter(HomeActivity.this, new String[]{"ES"}, new int[]{R.drawable.es_lang});
+                final SpinnerLanguageAdapter spAdapterBaseLanguage = new SpinnerLanguageAdapter(HomeActivity.this, new String[]{"ES", "NL", "EN"}, new int[]{R.drawable.es_lang, R.drawable.nl_lang, R.drawable.en_lang});
                 spBaseLanguage.setAdapter(spAdapterBaseLanguage);
-
-                spBaseLanguage.setEnabled(false);
+                int currentPositionSpinner = spAdapterBaseLanguage.getPosition(Common.getBaseLanguage());
+                spBaseLanguage.setSelection(currentPositionSpinner);
 
                 SpinnerLanguageAdapter spAdapterExampleLanguage = new SpinnerLanguageAdapter(HomeActivity.this, new String[]{"EN", "NL"}, new int[]{R.drawable.en_lang, R.drawable.nl_lang});
                 spExampleLanguage.setAdapter(spAdapterExampleLanguage);
-                int currentPositionSpinner = spAdapterExampleLanguage.getPosition(Common.getSystemLanguage());
+                currentPositionSpinner = spAdapterExampleLanguage.getPosition(Common.getExampleLanguage());
                 spExampleLanguage.setSelection(currentPositionSpinner);
 
                 adbLanguages.setView(vLanguages);
@@ -122,9 +116,11 @@ public class HomeActivity extends AppCompatActivity {
                         // TODO guardar en Preferene shared<resources>
                         SharedPreferences sharedPreferences = getSharedPreferences("SP", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("BL", spBaseLanguage.getSelectedItem().toString());
                         editor.putString("LN", spExampleLanguage.getSelectedItem().toString());
-                        editor.commit();
-                        Picasso.with(HomeActivity.this).load(Common.allLanguages.get(Common.getSystemLanguage())).into(ivExampleLanguage);
+                        editor.apply();
+                        Picasso.with(HomeActivity.this).load(Common.allLanguages.get(Common.getBaseLanguage())).into(ivBaseLanguage);
+                        Picasso.with(HomeActivity.this).load(Common.allLanguages.get(Common.getExampleLanguage())).into(ivExampleLanguage);
                     }
                 });
                 adbLanguages.setNegativeButton(getResources().getString(R.string.cancel), null);
@@ -145,21 +141,20 @@ public class HomeActivity extends AppCompatActivity {
                 // Check if the input is not empty
                 if (palabra.length() > 0) {
 
-                    String id = Common.getIdByPalabra(jsonString, palabra);
+//                    String id = Common.getIdByPalabra(jsonString, palabra);
 
                     // Check if the response of the key exist
-                    if (id.length() > 0) {
+//                    if (id.length() > 0) {
                         // Go next Activity with ID word
                         Intent intent = new Intent(HomeActivity.this, DetailsActivity.class);
-                        intent.putExtra("id", id);
                         intent.putExtra("word", Character.toUpperCase(palabra.charAt(0)) + palabra.substring(1).toLowerCase());
                         startActivity(intent);
                         finish();
                         return;
 
-                    } else {
-                        Toast.makeText(mContext, "Esa palabra no esta en el diccionario", Toast.LENGTH_SHORT).show();
-                    }
+//                    } else {
+//                        Toast.makeText(mContext, "Esa palabra no esta en el diccionario", Toast.LENGTH_SHORT).show();
+//                    }
                 }
             }
         });
@@ -180,7 +175,7 @@ public class HomeActivity extends AppCompatActivity {
                     adapter = new HistoricAdapter(list, HomeActivity.this);
                     recyclerView.setAdapter(adapter);
 
-                    builder.setTitle(getResources().getString(R.string.select_word_from_favs    ));
+                    builder.setTitle(getResources().getString(R.string.select_word_from_favs));
                     builder.setView(view);
 
                     alertDialog = builder.create();

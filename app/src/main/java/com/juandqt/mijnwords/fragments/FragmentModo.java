@@ -101,8 +101,10 @@ public class FragmentModo extends Fragment implements View.OnClickListener {
             // Creamos los TV 12, 6 filas de 2
             // Iteramos los verbos y cogemos las persons
 
+            // FIXME: Error con ingles!
             for (int k = 0; k < modo.getAllVerbs().get(i).getVerbs().size(); k++) {
 
+                Log.e("PIP", modo.getAllVerbs().get(i).getVerbs().toString());
                 TextView tvPerson = new TextView(getContext());
                 tvPerson.setId(View.generateViewId());
                 tvPerson.setText(modo.getPersons().get(k));
@@ -145,7 +147,7 @@ public class FragmentModo extends Fragment implements View.OnClickListener {
                             public void onInit(int status) {
 
                                 if (status == TextToSpeech.SUCCESS) {
-                                    Locale locSpanish = new Locale(Common.getBaseVerblanguage());
+                                    Locale locSpanish = new Locale(Common.getBaseLanguage());
                                     int result = textToSpeech.setLanguage(locSpanish);
                                     // tts.setPitch(5); // set pitch level
                                     // tts.setSpeechRate(2); // set speech speed rate
