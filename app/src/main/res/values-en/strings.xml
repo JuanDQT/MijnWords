@@ -23,4 +23,5 @@
     <string name="saved_in_fav">Save in favourites</string>
     <string name="deleted_from_favs">Delete from favourites</string>
     <string name="no_verbs_saved">You do not have verbs saved</string>
+    <string name="verb_not_exist">That verb doest not exist</string>
 </resources>
