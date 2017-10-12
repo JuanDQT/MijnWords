@@ -13,6 +13,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -50,6 +51,9 @@ public class HomeActivity extends AppCompatActivity {
     private ArrayList<PalabraSearch> list;
     private HistoricAdapter adapter;
 
+    private String[] codeLanguges = new String[]{"ES","NL","EN"};
+    private int[] flagLanguges = new int[]{R.drawable.es_lang, R.drawable.nl_lang, R.drawable.en_lang};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +67,7 @@ public class HomeActivity extends AppCompatActivity {
         ivBaseLanguage = (ImageView) findViewById(R.id.ivBaseLanguage);
         ivExampleLanguage = (ImageView) findViewById(R.id.ivExampleLanguage);
         btnHistoric = (Button) findViewById(R.id.btnHistoric);
+
 
         Picasso.with(this).load(Common.allLanguages.get(Common.getExampleLanguage())).into(ivExampleLanguage);
         Picasso.with(this).load(Common.allLanguages.get(Common.getBaseLanguage())).into(ivBaseLanguage);
@@ -94,19 +99,28 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(final View v) {
 
                 AlertDialog.Builder adbLanguages = new AlertDialog.Builder(HomeActivity.this);
-                View vLanguages = LayoutInflater.from(HomeActivity.this).inflate(R.layout.ad_languages, null);
+                final View vLanguages = LayoutInflater.from(HomeActivity.this).inflate(R.layout.ad_languages, null);
                 final Spinner spBaseLanguage = (Spinner) vLanguages.findViewById(R.id.spBaseLanguage);
                 final Spinner spExampleLanguage = (Spinner) vLanguages.findViewById(R.id.spExamplesLanguage);
 
-                final SpinnerLanguageAdapter spAdapterBaseLanguage = new SpinnerLanguageAdapter(HomeActivity.this, new String[]{"ES", "NL", "EN"}, new int[]{R.drawable.es_lang, R.drawable.nl_lang, R.drawable.en_lang});
+                final SpinnerLanguageAdapter spAdapterBaseLanguage = new SpinnerLanguageAdapter(HomeActivity.this, codeLanguges, flagLanguges);
                 spBaseLanguage.setAdapter(spAdapterBaseLanguage);
                 int currentPositionSpinner = spAdapterBaseLanguage.getPosition(Common.getBaseLanguage());
                 spBaseLanguage.setSelection(currentPositionSpinner);
 
-                SpinnerLanguageAdapter spAdapterExampleLanguage = new SpinnerLanguageAdapter(HomeActivity.this, new String[]{"EN", "NL"}, new int[]{R.drawable.en_lang, R.drawable.nl_lang});
-                spExampleLanguage.setAdapter(spAdapterExampleLanguage);
-                currentPositionSpinner = spAdapterExampleLanguage.getPosition(Common.getExampleLanguage());
-                spExampleLanguage.setSelection(currentPositionSpinner);
+                setSpinnerExampleConfig(vLanguages, Common.getBaseLanguage());
+
+                spBaseLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        setSpinnerExampleConfig(vLanguages, codeLanguges[position]);
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                        // Nothing
+                    }
+                });
 
                 adbLanguages.setView(vLanguages);
                 adbLanguages.setTitle(getResources().getString(R.string.config_languages));
@@ -126,7 +140,6 @@ public class HomeActivity extends AppCompatActivity {
                 adbLanguages.setNegativeButton(getResources().getString(R.string.cancel), null);
                 AlertDialog adView = adbLanguages.create();
                 adView.show();
-
             }
         });
 
@@ -134,7 +147,6 @@ public class HomeActivity extends AppCompatActivity {
         mBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 // Obtenemos la palabra del fichero JSON
                 String palabra = mInput.getText().toString().trim();
 
@@ -203,4 +215,38 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
+    public void setSpinnerExampleConfig(View vLanguage, String baseLanguage) {
+        final Spinner spExampleLanguage = (Spinner) vLanguage.findViewById(R.id.spExamplesLanguage);
+        SpinnerLanguageAdapter spAdapterExampleLanguage = new SpinnerLanguageAdapter(HomeActivity.this, getCodeCountries(baseLanguage), getFlagsCountries(baseLanguage));
+        spExampleLanguage.setAdapter(spAdapterExampleLanguage);
+        int currentPositionSpinner = spAdapterExampleLanguage.getPosition(baseLanguage);
+        spExampleLanguage.setSelection(currentPositionSpinner);
+    }
+
+    public String[] getCodeCountries(String baseLanguage) {
+
+        String[] selectedCodeLanguages = new String[codeLanguges.length - 1];
+
+        for(int i = 0, index = 0; i < codeLanguges.length; i++) {
+            if (!codeLanguges[i].equals(baseLanguage)) {
+                selectedCodeLanguages[index] = codeLanguges[i];
+                index++;
+            }
+        }
+        return selectedCodeLanguages;
+    }
+
+    public int[] getFlagsCountries(String baseLanguage) {
+
+        int currentFlag = Common.allLanguages.get(baseLanguage);
+        int[] selectedFlagLanguages = new int[flagLanguges.length - 1];
+
+        for(int i = 0, index = 0; i < flagLanguges.length; i++) {
+            if (flagLanguges[i] != currentFlag) {
+                selectedFlagLanguages[index] = flagLanguges[i];
+                index++;
+            }
+        }
+        return selectedFlagLanguages;
+    }
 }

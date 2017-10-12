@@ -49,6 +49,7 @@ public class SpinnerLanguageAdapter extends ArrayAdapter {
         TextView tvLanguage = (TextView) view.findViewById(R.id.tvCountry);
         ImageView ivFlag = (ImageView) view.findViewById(R.id.ivFlag);
         tvLanguage.setText(languages[position]);
+
         Picasso.with(context).load(images[position]).into(ivFlag);
 
         return view;
