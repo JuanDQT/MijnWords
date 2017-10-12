@@ -3,7 +3,6 @@ package com.juandqt.mijnwords;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
@@ -39,7 +38,7 @@ import io.realm.Realm;
  */
 
 // https://stackoverflow.com/questions/3947641/android-equivalent-to-nsnotificationcenter
-class API {
+public class API {
 
     // MARK: - Descargamos los datos de la pagina y se lo enviamos al servidor
 
@@ -197,7 +196,7 @@ class API {
 
     static boolean checkIfWordIsInFav(String word) {
         try (Realm realm = Realm.getDefaultInstance()) {
-            PalabraSearch palabraSearch = realm.where(PalabraSearch.class).equalTo("name", word).findFirst();
+            PalabraSearch palabraSearch = realm.where(PalabraSearch.class).equalTo("name", word.toLowerCase()).findFirst();
             return palabraSearch != null;
         }
     }
@@ -206,19 +205,25 @@ class API {
         try (Realm realm = Realm.getDefaultInstance()) {
             realm.beginTransaction();
             PalabraSearch palabraSearch = realm.createObject(PalabraSearch.class);
-            palabraSearch.setName(palabra);
-            palabraSearch.setLanguageCode(baseCodeLanguge);
+            palabraSearch.setName(palabra.toLowerCase());
+            palabraSearch.setLanguageCode(baseCodeLanguge.toLowerCase());
             realm.commitTransaction();
         }
     }
 
     static void deleteWordFromFav(String word) {
         try (Realm realm = Realm.getDefaultInstance()) {
-            PalabraSearch palabraSearch = realm.where(PalabraSearch.class).equalTo("name", word).findFirst();
+            PalabraSearch palabraSearch = realm.where(PalabraSearch.class).equalTo("name", word.toLowerCase()).findFirst();
             realm.beginTransaction();
             // TODO: check?
             palabraSearch.deleteFromRealm();
             realm.commitTransaction();
+        }
+    }
+
+    public static String getPalabraCodeLanguageByString(String word) {
+        try (Realm realm = Realm.getDefaultInstance()) {
+            return realm.where(PalabraSearch.class).equalTo("name", word.toLowerCase()).findFirst().getLanguageCode().toLowerCase();
         }
     }
 

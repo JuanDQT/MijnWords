@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -200,14 +201,26 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-    public void selectedWord(String palabra) {
+    public void selectedWord(String palabra, String codePalabra) {
+        SharedPreferences.Editor editor = getSharedPreferences("SP", Context.MODE_PRIVATE).edit();
+        editor.putString("BL", codePalabra.toUpperCase());
+
+        // Si la palabra origen y ejemplo tienen el mismo code, cambiamos el code del ejemplo
+        if (Common.getExampleLanguage().toUpperCase().equals(codePalabra.toUpperCase())) {
+            String newCodeFocusLanguage = getCodeCountries(Common.getExampleLanguage())[0];
+            editor.putString("LN", newCodeFocusLanguage.toUpperCase());
+            Picasso.with(this).load(Common.allLanguages.get(codePalabra.toUpperCase())).into(ivBaseLanguage);
+            Picasso.with(this).load(Common.allLanguages.get(newCodeFocusLanguage.toUpperCase())).into(ivExampleLanguage);
+        }
+        editor.apply();
+
         alertDialog.hide();
         mInput.setText(palabra);
         mBuscar.performClick();
     }
 
-    public void removeVerbHistory(int position, String idPalabra) {
-        API.deleteWordFromFav(idPalabra);
+    public void removeVerbHistory(int position, String word) {
+        API.deleteWordFromFav(word);
         this.list.remove(position);
         this.adapter.notifyDataSetChanged();
         if (this.list.size() == 0) {

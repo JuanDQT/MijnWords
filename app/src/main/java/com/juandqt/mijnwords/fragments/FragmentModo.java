@@ -57,14 +57,8 @@ public class FragmentModo extends Fragment implements View.OnClickListener {
         tvModo.setText(modo.getTitle());
 
         int maxHeight = 0;
-        // debug
-        final TextView textView = new TextView(getContext());
-        textView.setText("j");
-
-//        textView.setTextSize(Dimension.SP, FONT_SIZE_TEXTVIEW);
-        int sizeDebug = tvModo.getLineHeight();
         //
-        maxScrollHeight = MIN_SCROLL_HEIGHT + (modo.getPersons().size() * sizeDebug) + (modo.getPersons().size() * MAX_MARGIN_TOP_TEXTVIEW) + MAX_MARGIN_TOP_TEXTVIEW;
+        maxScrollHeight = MIN_SCROLL_HEIGHT + (modo.getPersons().size() * tvModo.getLineHeight()) + (modo.getPersons().size() * MAX_MARGIN_TOP_TEXTVIEW) + MAX_MARGIN_TOP_TEXTVIEW;
 
         for (int i = 0; i < modo.getAllVerbs().size(); i++) {
 
@@ -84,6 +78,8 @@ public class FragmentModo extends Fragment implements View.OnClickListener {
             // Consultamos cuantas filas de verbos tiene: hay de 5 o 6 o mas...
             TextView tvTiempo = new TextView(getContext());
             tvTiempo.setId(View.generateViewId());
+            tvTiempo.setElegantTextHeight(true);
+            tvTiempo.setMaxLines(1);
             clRow.addView(tvTiempo);
 
             tvTiempo.setText(modo.getAllVerbs().get(i).getTiempo());
@@ -113,7 +109,7 @@ public class FragmentModo extends Fragment implements View.OnClickListener {
                 clRow.addView(tvPerson);
 
                 constraintSetTime.constrainWidth(tvPerson.getId(), ConstraintSet.WRAP_CONTENT);
-                constraintSetTime.constrainHeight(tvPerson.getId(), sizeDebug);
+                constraintSetTime.constrainHeight(tvPerson.getId(), tvModo.getLineHeight());
                 constraintSetTime.connect(tvPerson.getId(), ConstraintSet.TOP, clRow.getChildAt(k).getId(), ConstraintSet.BOTTOM, MAX_MARGIN_TOP_TEXTVIEW);
                 constraintSetTime.connect(tvPerson.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT);
                 constraintSetTime.setMargin(tvPerson.getId(), ConstraintSet.START, MAX_MARGIN_LEFT_RIGHT_TEXTVIEW);
@@ -132,7 +128,7 @@ public class FragmentModo extends Fragment implements View.OnClickListener {
                 clRow.addView(tvVerb);
 
                 constraintSetTime.constrainWidth(tvVerb.getId(), ConstraintSet.WRAP_CONTENT);
-                constraintSetTime.constrainHeight(tvVerb.getId(), sizeDebug);
+                constraintSetTime.constrainHeight(tvVerb.getId(), tvModo.getLineHeight());
                 constraintSetTime.connect(tvVerb.getId(), ConstraintSet.TOP, clRow.getChildAt(k).getId(), ConstraintSet.BOTTOM, MAX_MARGIN_TOP_TEXTVIEW);
                 constraintSetTime.connect(tvVerb.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT);
                 constraintSetTime.setMargin(tvVerb.getId(), ConstraintSet.END, MAX_MARGIN_LEFT_RIGHT_TEXTVIEW);

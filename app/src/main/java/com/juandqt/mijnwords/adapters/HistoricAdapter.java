@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.juandqt.mijnwords.API;
 import com.juandqt.mijnwords.HomeActivity;
 import com.juandqt.mijnwords.R;
 import com.juandqt.mijnwords.models.PalabraSearch;
@@ -39,25 +40,25 @@ public class HistoricAdapter extends RecyclerView.Adapter<HistoricAdapter.Palabr
     }
 
     @Override
-    public void onBindViewHolder(PalabraViewHolder holder, final int position) {
+    public void onBindViewHolder(final PalabraViewHolder holder, final int position) {
         holder.tvVerbo.setText(list.get(position).getName());
 
         SwipeActionView swipeView = (SwipeActionView) holder.itemView.findViewById(R.id.savItem);
-        
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 TextView tvVerbo = (TextView) v.findViewById(R.id.tvVerb);
-                ((HomeActivity)context).selectedWord(tvVerbo.getText().toString());
+
+                String codePalabra = API.getPalabraCodeLanguageByString(tvVerbo.getText().toString().toLowerCase());
+                ((HomeActivity) context).selectedWord(tvVerbo.getText().toString(), codePalabra);
             }
         });
 
         swipeView.setSwipeGestureListener(new SwipeGestureListener() {
             @Override
             public boolean onSwipedLeft(@NotNull SwipeActionView swipeActionView) {
-                // TODO: remover con el name
-//                TextView tvIdWord = (TextView) swipeActionView.findViewById(R.id.tvIdWord);
-//                ((HomeActivity)context).removeVerbHistory(position, tvIdWord.getText().toString());
+                ((HomeActivity)context).removeVerbHistory(position, list.get(position).getName().toLowerCase());
                 return true;
             }
 
@@ -74,6 +75,7 @@ public class HistoricAdapter extends RecyclerView.Adapter<HistoricAdapter.Palabr
 
     class PalabraViewHolder extends RecyclerView.ViewHolder {
         private TextView tvVerbo;
+
         public PalabraViewHolder(View itemView) {
             super(itemView);
             tvVerbo = (TextView) itemView.findViewById(R.id.tvVerb);
