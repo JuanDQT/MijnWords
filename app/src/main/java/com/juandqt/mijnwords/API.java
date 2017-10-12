@@ -54,7 +54,6 @@ class API {
             public void onResponse(String response) {
                 Intent intent = new Intent("SUCCESS");
                 HashMap<String, Word> params = new HashMap<>();
-                Log.e("PIP", response);
                 Word palabra = getData(response);
 
                 if (palabra == null) {

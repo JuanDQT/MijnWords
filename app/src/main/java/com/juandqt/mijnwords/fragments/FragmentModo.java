@@ -36,7 +36,6 @@ public class FragmentModo extends Fragment implements View.OnClickListener {
     private static final int DURATION_TRANSITION = 650;
     private Modo modo;
     private TextToSpeech textToSpeech;
-    private static final int MAX_HEIGHT_TEXTVIEW = 75;
     private static final int MAX_MARGIN_TOP_TEXTVIEW = 20;
     private static final int MAX_MARGIN_LEFT_RIGHT_TEXTVIEW = 75;
     private static final int FONT_SIZE_TEXTVIEW = 18;
@@ -60,8 +59,10 @@ public class FragmentModo extends Fragment implements View.OnClickListener {
         int maxHeight = 0;
         // debug
         final TextView textView = new TextView(getContext());
-        textView.setTextSize(Dimension.SP, FONT_SIZE_TEXTVIEW);
-        int sizeDebug = textView.getLineHeight();
+        textView.setText("j");
+
+//        textView.setTextSize(Dimension.SP, FONT_SIZE_TEXTVIEW);
+        int sizeDebug = tvModo.getLineHeight();
         //
         maxScrollHeight = MIN_SCROLL_HEIGHT + (modo.getPersons().size() * sizeDebug) + (modo.getPersons().size() * MAX_MARGIN_TOP_TEXTVIEW) + MAX_MARGIN_TOP_TEXTVIEW;
 
@@ -100,11 +101,8 @@ public class FragmentModo extends Fragment implements View.OnClickListener {
 
             // Creamos los TV 12, 6 filas de 2
             // Iteramos los verbos y cogemos las persons
-
-            // FIXME: Error con ingles!
             for (int k = 0; k < modo.getAllVerbs().get(i).getVerbs().size(); k++) {
 
-                Log.e("PIP", modo.getAllVerbs().get(i).getVerbs().toString());
                 TextView tvPerson = new TextView(getContext());
                 tvPerson.setId(View.generateViewId());
                 tvPerson.setText(modo.getPersons().get(k));
@@ -134,7 +132,7 @@ public class FragmentModo extends Fragment implements View.OnClickListener {
                 clRow.addView(tvVerb);
 
                 constraintSetTime.constrainWidth(tvVerb.getId(), ConstraintSet.WRAP_CONTENT);
-                constraintSetTime.constrainHeight(tvVerb.getId(), MAX_HEIGHT_TEXTVIEW);
+                constraintSetTime.constrainHeight(tvVerb.getId(), sizeDebug);
                 constraintSetTime.connect(tvVerb.getId(), ConstraintSet.TOP, clRow.getChildAt(k).getId(), ConstraintSet.BOTTOM, MAX_MARGIN_TOP_TEXTVIEW);
                 constraintSetTime.connect(tvVerb.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT);
                 constraintSetTime.setMargin(tvVerb.getId(), ConstraintSet.END, MAX_MARGIN_LEFT_RIGHT_TEXTVIEW);
@@ -154,17 +152,11 @@ public class FragmentModo extends Fragment implements View.OnClickListener {
                                     if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                                         Log.e("TTS", "Language is not supported");
                                     } else {
-
-                                        if (!textToSpeech.isSpeaking()){
-                                            textToSpeech.speak(tvVerb.getText().toString(), TextToSpeech.QUEUE_FLUSH, null, null);
-                                        }
+                                        textToSpeech.speak(tvVerb.getText().toString(), TextToSpeech.QUEUE_FLUSH, null, null);
                                     }
-
-
                                 }
                             }
                         });
-
                     }
                 });
             }
