@@ -82,6 +82,7 @@ public class DetailsActivity extends AppCompatActivity {
         ivExampleVerb = (ImageView) findViewById(R.id.ivExampleVerb);
         ibSave = (ImageButton) findViewById(R.id.ibSave);
 
+        Picasso.with(this).load(Common.allLanguages.get(Common.getBaseLanguage())).into(ivBaseVerb);
         Picasso.with(this).load(Common.allLanguages.get(Common.getExampleLanguage())).into(ivExampleVerb);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(success, new IntentFilter("SUCCESS"));
