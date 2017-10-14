@@ -9,7 +9,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,8 +51,8 @@ public class HomeActivity extends AppCompatActivity {
     private ArrayList<PalabraSearch> list;
     private HistoricAdapter adapter;
 
-    private String[] codeLanguges = new String[]{"ES","NL","EN"};
-    private int[] flagLanguges = new int[]{R.drawable.es_lang, R.drawable.nl_lang, R.drawable.en_lang};
+    private String[] codeLanguges = Common.allLanguages.keySet().toArray(new String[Common.allLanguages.size()]);
+    private Integer[] flagLanguges = Common.allLanguages.values().toArray(new Integer[Common.allLanguages.size()]);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,26 +147,15 @@ public class HomeActivity extends AppCompatActivity {
         mBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Obtenemos la palabra del fichero JSON
                 String palabra = mInput.getText().toString().trim();
-
                 // Check if the input is not empty
                 if (palabra.length() > 0) {
+                    Intent intent = new Intent(HomeActivity.this, DetailsActivity.class);
+                    intent.putExtra("word", Character.toUpperCase(palabra.charAt(0)) + palabra.substring(1).toLowerCase());
+                    startActivity(intent);
+                    finish();
+                    return;
 
-//                    String id = Common.getIdByPalabra(jsonString, palabra);
-
-                    // Check if the response of the key exist
-//                    if (id.length() > 0) {
-                        // Go next Activity with ID word
-                        Intent intent = new Intent(HomeActivity.this, DetailsActivity.class);
-                        intent.putExtra("word", Character.toUpperCase(palabra.charAt(0)) + palabra.substring(1).toLowerCase());
-                        startActivity(intent);
-                        finish();
-                        return;
-
-//                    } else {
-//                        Toast.makeText(mContext, "Esa palabra no esta en el diccionario", Toast.LENGTH_SHORT).show();
-//                    }
                 }
             }
         });
@@ -240,7 +228,7 @@ public class HomeActivity extends AppCompatActivity {
 
         String[] selectedCodeLanguages = new String[codeLanguges.length - 1];
 
-        for(int i = 0, index = 0; i < codeLanguges.length; i++) {
+        for (int i = 0, index = 0; i < codeLanguges.length; i++) {
             if (!codeLanguges[i].equals(baseLanguage)) {
                 selectedCodeLanguages[index] = codeLanguges[i];
                 index++;
@@ -249,12 +237,12 @@ public class HomeActivity extends AppCompatActivity {
         return selectedCodeLanguages;
     }
 
-    public int[] getFlagsCountries(String baseLanguage) {
+    public Integer[] getFlagsCountries(String baseLanguage) {
 
         int currentFlag = Common.allLanguages.get(baseLanguage);
-        int[] selectedFlagLanguages = new int[flagLanguges.length - 1];
+        Integer[] selectedFlagLanguages = new Integer[flagLanguges.length - 1];
 
-        for(int i = 0, index = 0; i < flagLanguges.length; i++) {
+        for (int i = 0, index = 0; i < flagLanguges.length; i++) {
             if (flagLanguges[i] != currentFlag) {
                 selectedFlagLanguages[index] = flagLanguges[i];
                 index++;

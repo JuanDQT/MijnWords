@@ -93,7 +93,7 @@ public class DetailsActivity extends AppCompatActivity {
         palabra = getIntent().getStringExtra("word");
 
         // Go call request
-        API.getResultados(Common.getContext(), palabra.trim().toLowerCase());
+        API.getResultados(Common.context, palabra.trim().toLowerCase());
 
         ibBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -234,7 +234,7 @@ public class DetailsActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     llError.setVisibility(View.GONE);
                     pbLoading.setVisibility(View.VISIBLE);
-                    API.getResultados(Common.getContext(), palabra.trim().toLowerCase());
+                    API.getResultados(Common.context, palabra.trim().toLowerCase());
                 }
             });
 

@@ -57,7 +57,6 @@ public class FragmentModo extends Fragment implements View.OnClickListener {
         tvModo.setText(modo.getTitle());
 
         int maxHeight = 0;
-        //
         maxScrollHeight = MIN_SCROLL_HEIGHT + (modo.getPersons().size() * tvModo.getLineHeight()) + (modo.getPersons().size() * MAX_MARGIN_TOP_TEXTVIEW) + MAX_MARGIN_TOP_TEXTVIEW;
 
         for (int i = 0; i < modo.getAllVerbs().size(); i++) {

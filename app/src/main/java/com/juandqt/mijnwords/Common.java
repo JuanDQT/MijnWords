@@ -4,6 +4,7 @@ import android.animation.ValueAnimator;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
@@ -15,7 +16,11 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -27,7 +32,8 @@ import io.realm.RealmConfiguration;
 public class Common extends Application {
 
     public static Context context;
-    private static final String FILE = "access.json";
+    private static final String FILE_ACCESS = "access.json";
+    private static final String FILE_LANGUAGES = "languages";
     public static HashMap<String, Integer> allLanguages;
 
     @Override
@@ -48,20 +54,24 @@ public class Common extends Application {
     // Almacenamos las referencias de code idiomas en un map para ser accedido mas facilmente
     private HashMap<String, Integer> instanceMapLanguages() {
         HashMap<String, Integer> map = new HashMap<>();
-        map.put("ES", R.drawable.es_lang);
-        map.put("NL", R.drawable.nl_lang);
-        map.put("EN", R.drawable.en_lang);
-        return map;
-    }
 
-    // Contexto global de la aplicacion
-    public static Context getContext() {
-        return context;
+        // Carga desde el JSON
+        // TODO: Comrpobar todo en JSON!
+        try {
+            for (Map.Entry<String, Object> i : toMap(new JSONObject(openJSON(FILE_LANGUAGES))).entrySet()) {
+                map.put(i.getKey(), getResources().getIdentifier(i.getValue().toString().replace("R.drawable.", ""), "drawable", getPackageName()));
+                Log.e("PIP", i.getValue().toString());
+            }
+
+        } catch (Exception e) {
+            ;
+        }
+        return map;
     }
 
     public String getHostURL() {
 
-        String jsonUrlFile = openJSON(FILE);
+        String jsonUrlFile = openJSON(FILE_ACCESS);
         String url = "";
         try {
             JSONObject jsonUrl = new JSONObject(jsonUrlFile);
@@ -77,7 +87,7 @@ public class Common extends Application {
         String json = null;
         try {
 
-            InputStream is = getContext().getAssets().open(jsonFile);
+            InputStream is = this.context.getAssets().open(jsonFile);
 
             int size = is.available();
 
@@ -158,44 +168,44 @@ public class Common extends Application {
         return ln;
     }
 
-    public static String getIdByPalabra(String json, String palabra) {
+    public static Map<String, Object> jsonToMap(JSONObject json) throws JSONException {
+        Map<String, Object> retMap = new HashMap<String, Object>();
 
-        String id = "";
-
-        try {
-            JSONObject jsonFile = new JSONObject(json);
-
-            // Iterar sobre las letras
-
-            if (palabra.charAt(0) >= 'a' && palabra.charAt(0) <= 'z' || palabra.charAt(0) >= 'A' && palabra.charAt(0) <= 'Z') {
-
-                try {
-
-                    String firstLetra = palabra.toUpperCase().charAt(0) + "";
-
-                    // Si es numero o ~234.. etc, de esta linea pasa a la excepcion
-                    JSONArray letraJSON = jsonFile.getJSONArray(firstLetra);
-
-                    for (int i = 0; i < letraJSON.length(); i++) {
-                        JSONObject row = letraJSON.getJSONObject(i);
-                        String key = row.keys().next();
-
-                        if (row.getString(key).equals(palabra.toLowerCase())) {
-                            id = key;
-                        }
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if (json != JSONObject.NULL) {
+            retMap = toMap(json);
         }
-
-
-        return id;
+        return retMap;
     }
 
+    public static Map<String, Object> toMap(JSONObject object) throws JSONException {
+        Map<String, Object> map = new HashMap<String, Object>();
+
+        Iterator<String> keysItr = object.keys();
+        while (keysItr.hasNext()) {
+            String key = keysItr.next();
+            Object value = object.get(key);
+
+            if (value instanceof JSONArray) {
+                value = toList((JSONArray) value);
+            } else if (value instanceof JSONObject) {
+                value = toMap((JSONObject) value);
+            }
+            map.put(key, value);
+        }
+        return map;
+    }
+
+    public static List<Object> toList(JSONArray array) throws JSONException {
+        List<Object> list = new ArrayList<Object>();
+        for (int i = 0; i < array.length(); i++) {
+            Object value = array.get(i);
+            if (value instanceof JSONArray) {
+                value = toList((JSONArray) value);
+            } else if (value instanceof JSONObject) {
+                value = toMap((JSONObject) value);
+            }
+            list.add(value);
+        }
+        return list;
+    }
 }
