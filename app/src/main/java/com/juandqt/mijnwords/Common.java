@@ -55,12 +55,9 @@ public class Common extends Application {
     private HashMap<String, Integer> instanceMapLanguages() {
         HashMap<String, Integer> map = new HashMap<>();
 
-        // Carga desde el JSON
-        // TODO: Comrpobar todo en JSON!
         try {
             for (Map.Entry<String, Object> i : toMap(new JSONObject(openJSON(FILE_LANGUAGES))).entrySet()) {
                 map.put(i.getKey(), getResources().getIdentifier(i.getValue().toString().replace("R.drawable.", ""), "drawable", getPackageName()));
-                Log.e("PIP", i.getValue().toString());
             }
 
         } catch (Exception e) {

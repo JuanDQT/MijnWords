@@ -188,7 +188,6 @@ public class API {
 
         } catch (JSONException e) {
             e.printStackTrace();
-            e.printStackTrace();
         }
 
         return palabra;
@@ -215,7 +214,6 @@ public class API {
         try (Realm realm = Realm.getDefaultInstance()) {
             PalabraSearch palabraSearch = realm.where(PalabraSearch.class).equalTo("name", word.toLowerCase()).findFirst();
             realm.beginTransaction();
-            // TODO: check?
             palabraSearch.deleteFromRealm();
             realm.commitTransaction();
         }

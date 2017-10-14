@@ -134,8 +134,8 @@ public class DetailsActivity extends AppCompatActivity {
                 Toast.makeText(Common.context, getResources().getString(R.string.verb_not_exist), Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(context, HomeActivity.class));
                 finish();
+                return;
             }
-
 
             // Checkeamos si existe
             if (API.checkIfWordIsInFav(palabra)) {
@@ -146,10 +146,7 @@ public class DetailsActivity extends AppCompatActivity {
 
             pbLoading.setVisibility(View.GONE);
             vpContent.setVisibility(View.VISIBLE);
-
-
             tvWord.setText(palabra.toUpperCase());
-
 
             int totalPages = word.getModos().size();
             ArrayList<FragmentModo> fragments = new ArrayList<>();

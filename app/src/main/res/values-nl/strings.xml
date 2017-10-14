@@ -23,4 +23,5 @@
     <string name="saved_in_fav">Opslaan in favorieten</string>
     <string name="deleted_from_favs">Uit favorieten verwijderen</string>
     <string name="no_verbs_saved">Je hebt geen werkwoorden opgeslagen</string>
+    <string name="verb_not_exist">That verb doest not exist</string>
 </resources>

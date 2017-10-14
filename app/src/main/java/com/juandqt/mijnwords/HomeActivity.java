@@ -127,7 +127,6 @@ public class HomeActivity extends AppCompatActivity {
                 adbLanguages.setPositiveButton(getResources().getString(R.string.save), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // TODO guardar en Preferene shared<resources>
                         SharedPreferences sharedPreferences = getSharedPreferences("SP", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putString("BL", spBaseLanguage.getSelectedItem().toString());
