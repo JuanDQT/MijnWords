@@ -5,12 +5,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.juandqt.mijnwords.API;
+import com.juandqt.mijnwords.Common;
 import com.juandqt.mijnwords.HomeActivity;
 import com.juandqt.mijnwords.R;
 import com.juandqt.mijnwords.models.PalabraSearch;
+import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -42,7 +45,8 @@ public class HistoricAdapter extends RecyclerView.Adapter<HistoricAdapter.Palabr
     @Override
     public void onBindViewHolder(final PalabraViewHolder holder, final int position) {
         holder.tvVerbo.setText(list.get(position).getName());
-
+        int flagResource = context.getResources().getIdentifier(Common.allLanguages.get(list.get(position).getLanguageCode().toUpperCase()).toString(), "drawable", context.getPackageName());
+        Picasso.with(context).load(flagResource).into(holder.ivFlag);
         SwipeActionView swipeView = (SwipeActionView) holder.itemView.findViewById(R.id.savItem);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -75,10 +79,12 @@ public class HistoricAdapter extends RecyclerView.Adapter<HistoricAdapter.Palabr
 
     class PalabraViewHolder extends RecyclerView.ViewHolder {
         private TextView tvVerbo;
+        private ImageView ivFlag;
 
         public PalabraViewHolder(View itemView) {
             super(itemView);
             tvVerbo = (TextView) itemView.findViewById(R.id.tvVerb);
+            ivFlag = (ImageView) itemView.findViewById(R.id.ivSwipeFlag);
         }
     }
 

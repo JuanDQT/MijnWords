@@ -163,11 +163,8 @@ public class DetailsActivity extends AppCompatActivity {
             } else {
                 clEjemplos.setVisibility(View.VISIBLE);
 
-                // Un ejemplo en espanol
                 tvEjemploEs.setText(word.getEjemplo().getEjemplosEs().get(0));
                 tvEjemploNl.setText(word.getEjemplo().getEjemplosNl().get(0));
-
-                // Varios ejemplos en espanol
 
                 clEjemplos.setOnClickListener(new View.OnClickListener() {
                     @Override

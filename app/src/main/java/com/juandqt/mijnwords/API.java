@@ -144,8 +144,8 @@ public class API {
                 ArrayList<String> ejemplosNl = new ArrayList<>();
 
                 for (int i = 0; i < jsonEjemplosEs.length(); i++) {
-                    ejemplosEs.add(jsonEjemplosEs.getString(i));
-                    ejemplosNl.add(jsonEjemplosNl.getString(i));
+                    ejemplosEs.add(jsonEjemplosEs.getString(i).replace(Common.getBaseLanguage().toUpperCase()+ ":", "").trim().substring(0,1).toUpperCase() + jsonEjemplosEs.getString(i).replace(Common.getBaseLanguage().toUpperCase()+ ":", "").trim().substring(1));
+                    ejemplosNl.add(jsonEjemplosNl.getString(i).substring(0,1).toUpperCase() + jsonEjemplosNl.getString(i).substring(1));
                 }
 
                 ejemplo.setEjemplosEs(ejemplosEs);

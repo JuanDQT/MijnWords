@@ -68,7 +68,6 @@ public class HomeActivity extends AppCompatActivity {
         ivExampleLanguage = (ImageView) findViewById(R.id.ivExampleLanguage);
         btnHistoric = (Button) findViewById(R.id.btnHistoric);
 
-
         Picasso.with(this).load(Common.allLanguages.get(Common.getExampleLanguage())).into(ivExampleLanguage);
         Picasso.with(this).load(Common.allLanguages.get(Common.getBaseLanguage())).into(ivBaseLanguage);
 

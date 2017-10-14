@@ -1,5 +1,7 @@
 {
   "ES": "R.drawable.es_lang",
   "NL": "R.drawable.nl_lang",
-  "EN": "R.drawable.en_lang"
+  "EN": "R.drawable.en_lang",
+  "DE": "R.drawable.de_lang",
+  "FR": "R.drawable.fr_lang"
 }

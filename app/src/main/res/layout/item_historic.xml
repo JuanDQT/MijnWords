@@ -7,18 +7,40 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ImageView
+        android:id="@+id/imageView4"
         android:layout_width="75dp"
         android:layout_height="match_parent"
         android:layout_gravity="end"
         android:scaleType="fitEnd"
         android:src="@android:drawable/ic_menu_delete" />
 
-    <TextView
-        android:id="@+id/tvVerb"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:paddingStart="16dp"
-        android:text="Swipe me" />
+        android:layout_height="match_parent"
+        android:background="#fff">
+
+        <ImageView
+            android:id="@+id/ivSwipeFlag"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="13dp"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/tvVerb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="false"
+            android:layout_centerInParent="false"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@+id/ivSwipeFlag"
+            android:padding="5dp"
+            android:text="Swipe me" />
+
+    </RelativeLayout>
+
 
 </me.thanel.swipeactionview.SwipeActionView>
