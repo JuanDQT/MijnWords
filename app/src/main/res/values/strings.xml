@@ -25,32 +25,6 @@
 
     <!--No traducir-->
 
-    <string name="modo_indicativo" translatable="false">Modo indicativo</string>
-    <string name="presente" translatable="false">Presente</string>
-    <string name="preterito_imperfecto" translatable="false">Pretérito imperfecto</string>
-    <string name="preterito_indefinido" translatable="false">Pretérito indefinido</string>
-    <string name="futuro" translatable="false">Futuro</string>
-    <string name="condicional" translatable="false">Condicional</string>
-    <string name="afirmativo" translatable="false">Afirmativo</string>
-    <string name="negativo" translatable="false">Negativo</string>
-
-    <string name="modo_subjuntivo" translatable="false">Modo subjuntivo</string>
-    <string name="modo_condicional" translatable="false">Modo condicional</string>
-    <string name="modo_imperativo" translatable="false">Modo imperativo</string>
-
-    <string name="yo" translatable="false">Yo</string>
-    <string name="tu" translatable="false">Tú</string>
-    <string name="tu_no" translatable="false">Tú no</string>
-    <string name="usted" translatable="false">Usted</string>
-    <string name="usted_no" translatable="false">Usted no</string>
-    <string name="ustedes" translatable="false">Ustedes</string>
-    <string name="ustedes_no" translatable="false">Ustedes no</string>
-    <string name="el" translatable="false">Él, ella, usted</string>
-    <string name="nosotros" translatable="false">Nosotros</string>
-    <string name="nosotros_no" translatable="false">Nosotros no</string>
-    <string name="vosotros" translatable="false">Vosotros</string>
-    <string name="vosotros_no" translatable="false">Vosotros no</string>
-    <string name="ellos" translatable="false">Ellos</string>
     <string name="search">Buscar</string>
     <string name="introduce_word">Introduce una palabra</string>
 
@@ -58,6 +32,7 @@
     <string name="saved_in_fav">Guardado en favoritos</string>
     <string name="deleted_from_favs">Eliminado de favoritos</string>
     <string name="no_verbs_saved">No tienes verbos guardados</string>
+    <string name="verb_not_exist">Ese verbo no existe</string>
 
 
 </resources>

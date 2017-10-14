@@ -19,5 +19,9 @@ public class CustomMigration implements RealmMigration {
                     addField("languageCode", String.class);
             oldVersion++;
         }
+        if (oldVersion == 2) {
+            realmSchema.get("PalabraSearch").removeField("id");
+            oldVersion++;
+        }
     }
 }

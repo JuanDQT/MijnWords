@@ -36,7 +36,6 @@ public class FragmentModo extends Fragment implements View.OnClickListener {
     private static final int DURATION_TRANSITION = 650;
     private Modo modo;
     private TextToSpeech textToSpeech;
-    private static final int MAX_HEIGHT_TEXTVIEW = 75;
     private static final int MAX_MARGIN_TOP_TEXTVIEW = 20;
     private static final int MAX_MARGIN_LEFT_RIGHT_TEXTVIEW = 75;
     private static final int FONT_SIZE_TEXTVIEW = 18;
@@ -58,12 +57,7 @@ public class FragmentModo extends Fragment implements View.OnClickListener {
         tvModo.setText(modo.getTitle());
 
         int maxHeight = 0;
-        // debug
-        final TextView textView = new TextView(getContext());
-        textView.setTextSize(Dimension.SP, FONT_SIZE_TEXTVIEW);
-        int sizeDebug = textView.getLineHeight();
-        //
-        maxScrollHeight = MIN_SCROLL_HEIGHT + (modo.getPersons().size() * sizeDebug) + (modo.getPersons().size() * MAX_MARGIN_TOP_TEXTVIEW) + MAX_MARGIN_TOP_TEXTVIEW;
+        maxScrollHeight = MIN_SCROLL_HEIGHT + (modo.getPersons().size() * tvModo.getLineHeight()) + (modo.getPersons().size() * MAX_MARGIN_TOP_TEXTVIEW) + MAX_MARGIN_TOP_TEXTVIEW;
 
         for (int i = 0; i < modo.getAllVerbs().size(); i++) {
 
@@ -83,6 +77,8 @@ public class FragmentModo extends Fragment implements View.OnClickListener {
             // Consultamos cuantas filas de verbos tiene: hay de 5 o 6 o mas...
             TextView tvTiempo = new TextView(getContext());
             tvTiempo.setId(View.generateViewId());
+            tvTiempo.setElegantTextHeight(true);
+            tvTiempo.setMaxLines(1);
             clRow.addView(tvTiempo);
 
             tvTiempo.setText(modo.getAllVerbs().get(i).getTiempo());
@@ -100,7 +96,6 @@ public class FragmentModo extends Fragment implements View.OnClickListener {
 
             // Creamos los TV 12, 6 filas de 2
             // Iteramos los verbos y cogemos las persons
-
             for (int k = 0; k < modo.getAllVerbs().get(i).getVerbs().size(); k++) {
 
                 TextView tvPerson = new TextView(getContext());
@@ -113,7 +108,7 @@ public class FragmentModo extends Fragment implements View.OnClickListener {
                 clRow.addView(tvPerson);
 
                 constraintSetTime.constrainWidth(tvPerson.getId(), ConstraintSet.WRAP_CONTENT);
-                constraintSetTime.constrainHeight(tvPerson.getId(), sizeDebug);
+                constraintSetTime.constrainHeight(tvPerson.getId(), tvModo.getLineHeight());
                 constraintSetTime.connect(tvPerson.getId(), ConstraintSet.TOP, clRow.getChildAt(k).getId(), ConstraintSet.BOTTOM, MAX_MARGIN_TOP_TEXTVIEW);
                 constraintSetTime.connect(tvPerson.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT);
                 constraintSetTime.setMargin(tvPerson.getId(), ConstraintSet.START, MAX_MARGIN_LEFT_RIGHT_TEXTVIEW);
@@ -132,7 +127,7 @@ public class FragmentModo extends Fragment implements View.OnClickListener {
                 clRow.addView(tvVerb);
 
                 constraintSetTime.constrainWidth(tvVerb.getId(), ConstraintSet.WRAP_CONTENT);
-                constraintSetTime.constrainHeight(tvVerb.getId(), MAX_HEIGHT_TEXTVIEW);
+                constraintSetTime.constrainHeight(tvVerb.getId(), tvModo.getLineHeight());
                 constraintSetTime.connect(tvVerb.getId(), ConstraintSet.TOP, clRow.getChildAt(k).getId(), ConstraintSet.BOTTOM, MAX_MARGIN_TOP_TEXTVIEW);
                 constraintSetTime.connect(tvVerb.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT);
                 constraintSetTime.setMargin(tvVerb.getId(), ConstraintSet.END, MAX_MARGIN_LEFT_RIGHT_TEXTVIEW);
@@ -145,24 +140,18 @@ public class FragmentModo extends Fragment implements View.OnClickListener {
                             public void onInit(int status) {
 
                                 if (status == TextToSpeech.SUCCESS) {
-                                    Locale locSpanish = new Locale(Common.getBaseVerblanguage());
+                                    Locale locSpanish = new Locale(Common.getBaseLanguage());
                                     int result = textToSpeech.setLanguage(locSpanish);
                                     // tts.setPitch(5); // set pitch level
                                     // tts.setSpeechRate(2); // set speech speed rate
                                     if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                                         Log.e("TTS", "Language is not supported");
                                     } else {
-
-                                        if (!textToSpeech.isSpeaking()){
-                                            textToSpeech.speak(tvVerb.getText().toString(), TextToSpeech.QUEUE_FLUSH, null, null);
-                                        }
+                                        textToSpeech.speak(tvVerb.getText().toString(), TextToSpeech.QUEUE_FLUSH, null, null);
                                     }
-
-
                                 }
                             }
                         });
-
                     }
                 });
             }

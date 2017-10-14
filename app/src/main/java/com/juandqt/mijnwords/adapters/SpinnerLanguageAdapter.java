@@ -19,11 +19,11 @@ import com.squareup.picasso.Picasso;
 
 public class SpinnerLanguageAdapter extends ArrayAdapter {
     private String[] languages;
-    private int[] images;
+    private Integer[] images;
     private Context context;
 
 
-    public SpinnerLanguageAdapter(@NonNull Context context, String[] languages, int[] images) {
+    public SpinnerLanguageAdapter(@NonNull Context context, String[] languages, Integer[] images) {
         super(context, R.layout.sp_language,languages);
         this.context = context;
         this.languages = languages;
@@ -49,6 +49,7 @@ public class SpinnerLanguageAdapter extends ArrayAdapter {
         TextView tvLanguage = (TextView) view.findViewById(R.id.tvCountry);
         ImageView ivFlag = (ImageView) view.findViewById(R.id.ivFlag);
         tvLanguage.setText(languages[position]);
+
         Picasso.with(context).load(images[position]).into(ivFlag);
 
         return view;

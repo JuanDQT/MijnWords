@@ -38,12 +38,12 @@ import io.realm.Realm;
  */
 
 // https://stackoverflow.com/questions/3947641/android-equivalent-to-nsnotificationcenter
-class API {
+public class API {
 
     // MARK: - Descargamos los datos de la pagina y se lo enviamos al servidor
 
 
-    static void getResultados(final Context context, final String id, final String palabra) {
+    static void getResultados(final Context context, final String palabra) {
         // Instantiate the RequestQueue.
         final RequestQueue queue = Volley.newRequestQueue(context);
         final String host = new Common().getHostURL();
@@ -53,7 +53,6 @@ class API {
             public void onResponse(String response) {
                 Intent intent = new Intent("SUCCESS");
                 HashMap<String, Word> params = new HashMap<>();
-
                 Word palabra = getData(response);
 
                 if (palabra == null) {
@@ -76,11 +75,10 @@ class API {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("id", id);
                 params.put("palabra", palabra);
-                params.put("lng_focus", Common.getSystemLanguage());
-                params.put("lng_base", "ES");
-                params.put("app_version", "3");
+                params.put("lng_focus", Common.getExampleLanguage());
+                params.put("lng_base", Common.getBaseLanguage().toLowerCase());
+                params.put("app_version", "4");
                 return params;
             }
         };
@@ -146,8 +144,8 @@ class API {
                 ArrayList<String> ejemplosNl = new ArrayList<>();
 
                 for (int i = 0; i < jsonEjemplosEs.length(); i++) {
-                    ejemplosEs.add(jsonEjemplosEs.getString(i));
-                    ejemplosNl.add(jsonEjemplosNl.getString(i));
+                    ejemplosEs.add(jsonEjemplosEs.getString(i).replace(Common.getBaseLanguage().toUpperCase()+ ":", "").trim().substring(0,1).toUpperCase() + jsonEjemplosEs.getString(i).replace(Common.getBaseLanguage().toUpperCase()+ ":", "").trim().substring(1));
+                    ejemplosNl.add(jsonEjemplosNl.getString(i).substring(0,1).toUpperCase() + jsonEjemplosNl.getString(i).substring(1));
                 }
 
                 ejemplo.setEjemplosEs(ejemplosEs);
@@ -195,29 +193,35 @@ class API {
         return palabra;
     }
 
-    static boolean checkIfWordIsInFav(String id) {
+    static boolean checkIfWordIsInFav(String word) {
         try (Realm realm = Realm.getDefaultInstance()) {
-            PalabraSearch palabraSearch = realm.where(PalabraSearch.class).equalTo("id", Integer.parseInt(id)).findFirst();
+            PalabraSearch palabraSearch = realm.where(PalabraSearch.class).equalTo("name", word.toLowerCase()).findFirst();
             return palabraSearch != null;
         }
     }
 
-    static void saveWordToFav(String id, String palabra, String baseCodeLanguge) {
+    static void saveWordToFav(String palabra, String baseCodeLanguge) {
         try (Realm realm = Realm.getDefaultInstance()) {
             realm.beginTransaction();
-            PalabraSearch palabraSearch = realm.createObject(PalabraSearch.class, Integer.parseInt(id));
-            palabraSearch.setName(palabra);
-            palabraSearch.setLanguageCode(baseCodeLanguge);
+            PalabraSearch palabraSearch = realm.createObject(PalabraSearch.class);
+            palabraSearch.setName(palabra.toLowerCase());
+            palabraSearch.setLanguageCode(baseCodeLanguge.toLowerCase());
             realm.commitTransaction();
         }
     }
 
-    static void deleteWordFromFav(String id) {
+    static void deleteWordFromFav(String word) {
         try (Realm realm = Realm.getDefaultInstance()) {
-            PalabraSearch palabraSearch = realm.where(PalabraSearch.class).equalTo("id", Integer.parseInt(id)).findFirst();
+            PalabraSearch palabraSearch = realm.where(PalabraSearch.class).equalTo("name", word.toLowerCase()).findFirst();
             realm.beginTransaction();
             palabraSearch.deleteFromRealm();
             realm.commitTransaction();
+        }
+    }
+
+    public static String getPalabraCodeLanguageByString(String word) {
+        try (Realm realm = Realm.getDefaultInstance()) {
+            return realm.where(PalabraSearch.class).equalTo("name", word.toLowerCase()).findFirst().getLanguageCode().toLowerCase();
         }
     }
 

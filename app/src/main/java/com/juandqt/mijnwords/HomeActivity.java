@@ -13,6 +13,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -28,9 +29,7 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import io.realm.Realm;
 
@@ -52,26 +51,25 @@ public class HomeActivity extends AppCompatActivity {
     private ArrayList<PalabraSearch> list;
     private HistoricAdapter adapter;
 
+    private String[] codeLanguges = Common.allLanguages.keySet().toArray(new String[Common.allLanguages.size()]);
+    private Integer[] flagLanguges = Common.allLanguages.values().toArray(new Integer[Common.allLanguages.size()]);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
-        // Leemos
-        final InputStream inputStream = getResources().openRawResource(R.raw.palabras); // getting JSON
-
-        Scanner s = new Scanner(inputStream).useDelimiter("\\A");
-        final String jsonString = s.hasNext() ? s.next() : "";
 
         mContext = this.getApplicationContext();
         mBuscar = (Button) findViewById(R.id.btnBuscar);
         mInput = (EditText) findViewById(R.id.etBuscar);
         ivInfo = (ImageView) findViewById(R.id.ivInfo);
         ivlanguage = (ImageView) findViewById(R.id.ivLanguage);
+        ivBaseLanguage = (ImageView) findViewById(R.id.ivBaseLanguage);
         ivExampleLanguage = (ImageView) findViewById(R.id.ivExampleLanguage);
         btnHistoric = (Button) findViewById(R.id.btnHistoric);
 
-        Picasso.with(this).load(Common.allLanguages.get(Common.getSystemLanguage())).into(ivExampleLanguage);
+        Picasso.with(this).load(Common.allLanguages.get(Common.getExampleLanguage())).into(ivExampleLanguage);
+        Picasso.with(this).load(Common.allLanguages.get(Common.getBaseLanguage())).into(ivBaseLanguage);
 
         mInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -100,37 +98,46 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(final View v) {
 
                 AlertDialog.Builder adbLanguages = new AlertDialog.Builder(HomeActivity.this);
-                View vLanguages = LayoutInflater.from(HomeActivity.this).inflate(R.layout.ad_languages, null);
+                final View vLanguages = LayoutInflater.from(HomeActivity.this).inflate(R.layout.ad_languages, null);
                 final Spinner spBaseLanguage = (Spinner) vLanguages.findViewById(R.id.spBaseLanguage);
                 final Spinner spExampleLanguage = (Spinner) vLanguages.findViewById(R.id.spExamplesLanguage);
 
-                final SpinnerLanguageAdapter spAdapterBaseLanguage = new SpinnerLanguageAdapter(HomeActivity.this, new String[]{"ES"}, new int[]{R.drawable.es_lang});
+                final SpinnerLanguageAdapter spAdapterBaseLanguage = new SpinnerLanguageAdapter(HomeActivity.this, codeLanguges, flagLanguges);
                 spBaseLanguage.setAdapter(spAdapterBaseLanguage);
+                int currentPositionSpinner = spAdapterBaseLanguage.getPosition(Common.getBaseLanguage());
+                spBaseLanguage.setSelection(currentPositionSpinner);
 
-                spBaseLanguage.setEnabled(false);
+                setSpinnerExampleConfig(vLanguages, Common.getBaseLanguage());
 
-                SpinnerLanguageAdapter spAdapterExampleLanguage = new SpinnerLanguageAdapter(HomeActivity.this, new String[]{"EN", "NL"}, new int[]{R.drawable.en_lang, R.drawable.nl_lang});
-                spExampleLanguage.setAdapter(spAdapterExampleLanguage);
-                int currentPositionSpinner = spAdapterExampleLanguage.getPosition(Common.getSystemLanguage());
-                spExampleLanguage.setSelection(currentPositionSpinner);
+                spBaseLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        setSpinnerExampleConfig(vLanguages, codeLanguges[position]);
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                        // Nothing
+                    }
+                });
 
                 adbLanguages.setView(vLanguages);
                 adbLanguages.setTitle(getResources().getString(R.string.config_languages));
                 adbLanguages.setPositiveButton(getResources().getString(R.string.save), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // TODO guardar en Preferene shared<resources>
                         SharedPreferences sharedPreferences = getSharedPreferences("SP", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("BL", spBaseLanguage.getSelectedItem().toString());
                         editor.putString("LN", spExampleLanguage.getSelectedItem().toString());
-                        editor.commit();
-                        Picasso.with(HomeActivity.this).load(Common.allLanguages.get(Common.getSystemLanguage())).into(ivExampleLanguage);
+                        editor.apply();
+                        Picasso.with(HomeActivity.this).load(Common.allLanguages.get(Common.getBaseLanguage())).into(ivBaseLanguage);
+                        Picasso.with(HomeActivity.this).load(Common.allLanguages.get(Common.getExampleLanguage())).into(ivExampleLanguage);
                     }
                 });
                 adbLanguages.setNegativeButton(getResources().getString(R.string.cancel), null);
                 AlertDialog adView = adbLanguages.create();
                 adView.show();
-
             }
         });
 
@@ -138,28 +145,15 @@ public class HomeActivity extends AppCompatActivity {
         mBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                // Obtenemos la palabra del fichero JSON
                 String palabra = mInput.getText().toString().trim();
-
                 // Check if the input is not empty
                 if (palabra.length() > 0) {
+                    Intent intent = new Intent(HomeActivity.this, DetailsActivity.class);
+                    intent.putExtra("word", Character.toUpperCase(palabra.charAt(0)) + palabra.substring(1).toLowerCase());
+                    startActivity(intent);
+                    finish();
+                    return;
 
-                    String id = Common.getIdByPalabra(jsonString, palabra);
-
-                    // Check if the response of the key exist
-                    if (id.length() > 0) {
-                        // Go next Activity with ID word
-                        Intent intent = new Intent(HomeActivity.this, DetailsActivity.class);
-                        intent.putExtra("id", id);
-                        intent.putExtra("word", Character.toUpperCase(palabra.charAt(0)) + palabra.substring(1).toLowerCase());
-                        startActivity(intent);
-                        finish();
-                        return;
-
-                    } else {
-                        Toast.makeText(mContext, "Esa palabra no esta en el diccionario", Toast.LENGTH_SHORT).show();
-                    }
                 }
             }
         });
@@ -180,7 +174,7 @@ public class HomeActivity extends AppCompatActivity {
                     adapter = new HistoricAdapter(list, HomeActivity.this);
                     recyclerView.setAdapter(adapter);
 
-                    builder.setTitle(getResources().getString(R.string.select_word_from_favs    ));
+                    builder.setTitle(getResources().getString(R.string.select_word_from_favs));
                     builder.setView(view);
 
                     alertDialog = builder.create();
@@ -193,14 +187,26 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-    public void selectedWord(String palabra) {
+    public void selectedWord(String palabra, String codePalabra) {
+        SharedPreferences.Editor editor = getSharedPreferences("SP", Context.MODE_PRIVATE).edit();
+        editor.putString("BL", codePalabra.toUpperCase());
+
+        // Si la palabra origen y ejemplo tienen el mismo code, cambiamos el code del ejemplo
+        if (Common.getExampleLanguage().toUpperCase().equals(codePalabra.toUpperCase())) {
+            String newCodeFocusLanguage = getCodeCountries(Common.getExampleLanguage())[0];
+            editor.putString("LN", newCodeFocusLanguage.toUpperCase());
+            Picasso.with(this).load(Common.allLanguages.get(codePalabra.toUpperCase())).into(ivBaseLanguage);
+            Picasso.with(this).load(Common.allLanguages.get(newCodeFocusLanguage.toUpperCase())).into(ivExampleLanguage);
+        }
+        editor.apply();
+
         alertDialog.hide();
         mInput.setText(palabra);
         mBuscar.performClick();
     }
 
-    public void removeVerbHistory(int position, String idPalabra) {
-        API.deleteWordFromFav(idPalabra);
+    public void removeVerbHistory(int position, String word) {
+        API.deleteWordFromFav(word);
         this.list.remove(position);
         this.adapter.notifyDataSetChanged();
         if (this.list.size() == 0) {
@@ -208,4 +214,38 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
+    public void setSpinnerExampleConfig(View vLanguage, String baseLanguage) {
+        final Spinner spExampleLanguage = (Spinner) vLanguage.findViewById(R.id.spExamplesLanguage);
+        SpinnerLanguageAdapter spAdapterExampleLanguage = new SpinnerLanguageAdapter(HomeActivity.this, getCodeCountries(baseLanguage), getFlagsCountries(baseLanguage));
+        spExampleLanguage.setAdapter(spAdapterExampleLanguage);
+        int currentPositionSpinner = spAdapterExampleLanguage.getPosition(baseLanguage);
+        spExampleLanguage.setSelection(currentPositionSpinner);
+    }
+
+    public String[] getCodeCountries(String baseLanguage) {
+
+        String[] selectedCodeLanguages = new String[codeLanguges.length - 1];
+
+        for (int i = 0, index = 0; i < codeLanguges.length; i++) {
+            if (!codeLanguges[i].equals(baseLanguage)) {
+                selectedCodeLanguages[index] = codeLanguges[i];
+                index++;
+            }
+        }
+        return selectedCodeLanguages;
+    }
+
+    public Integer[] getFlagsCountries(String baseLanguage) {
+
+        int currentFlag = Common.allLanguages.get(baseLanguage);
+        Integer[] selectedFlagLanguages = new Integer[flagLanguges.length - 1];
+
+        for (int i = 0, index = 0; i < flagLanguges.length; i++) {
+            if (flagLanguges[i] != currentFlag) {
+                selectedFlagLanguages[index] = flagLanguges[i];
+                index++;
+            }
+        }
+        return selectedFlagLanguages;
+    }
 }

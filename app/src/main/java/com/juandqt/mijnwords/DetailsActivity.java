@@ -37,7 +37,7 @@ public class DetailsActivity extends AppCompatActivity {
     private TextView tvError;
     private TextView tvWord;
     private Button btnError;
-    private String palabraId;
+//    private String palabraId;
     private String palabra;
 
     // Layouts
@@ -82,17 +82,18 @@ public class DetailsActivity extends AppCompatActivity {
         ivExampleVerb = (ImageView) findViewById(R.id.ivExampleVerb);
         ibSave = (ImageButton) findViewById(R.id.ibSave);
 
-        Picasso.with(this).load(Common.allLanguages.get(Common.getSystemLanguage())).into(ivExampleVerb);
+        Picasso.with(this).load(Common.allLanguages.get(Common.getBaseLanguage())).into(ivBaseVerb);
+        Picasso.with(this).load(Common.allLanguages.get(Common.getExampleLanguage())).into(ivExampleVerb);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(success, new IntentFilter("SUCCESS"));
         LocalBroadcastManager.getInstance(this).registerReceiver(errors, new IntentFilter("ERROR"));
         LocalBroadcastManager.getInstance(this).registerReceiver(update, new IntentFilter("UPDATE"));
 
-        palabraId = getIntent().getStringExtra("id");
+//        palabraId = getIntent().getStringExtra("id");
         palabra = getIntent().getStringExtra("word");
 
         // Go call request
-        API.getResultados(Common.getContext(), palabraId, palabra.trim().toLowerCase());
+        API.getResultados(Common.context, palabra.trim().toLowerCase());
 
         ibBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,14 +107,14 @@ public class DetailsActivity extends AppCompatActivity {
         ibSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (API.checkIfWordIsInFav(palabraId)) {
+                if (API.checkIfWordIsInFav(palabra)) {
                     Picasso.with(DetailsActivity.this).load(android.R.drawable.btn_star_big_off).into(ibSave);
-                    API.deleteWordFromFav(palabraId);
+                    API.deleteWordFromFav(palabra);
                     Toast.makeText(DetailsActivity.this, getResources().getString(R.string.deleted_from_favs), Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(DetailsActivity.this, getResources().getString(R.string.saved_in_fav), Toast.LENGTH_SHORT).show();
                     Picasso.with(DetailsActivity.this).load(android.R.drawable.btn_star_big_on).into(ibSave);
-                    API.saveWordToFav(palabraId, palabra, Common.getBaseVerblanguage());
+                    API.saveWordToFav(palabra, Common.getBaseLanguage());
                 }
             }
         });
@@ -125,8 +126,19 @@ public class DetailsActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, final Intent intent) {
 
+            HashMap<String, Word> params = (HashMap<String, Word>) intent.getSerializableExtra("map");
+
+            final Word word = params.get("palabra");
+
+            if (word.getModos().size() == 0) {
+                Toast.makeText(Common.context, getResources().getString(R.string.verb_not_exist), Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(context, HomeActivity.class));
+                finish();
+                return;
+            }
+
             // Checkeamos si existe
-            if (API.checkIfWordIsInFav(palabraId)) {
+            if (API.checkIfWordIsInFav(palabra)) {
                 Picasso.with(DetailsActivity.this).load(android.R.drawable.btn_star_big_on).into(ibSave);
             } else {
                 Picasso.with(DetailsActivity.this).load(android.R.drawable.btn_star_big_off).into(ibSave);
@@ -134,39 +146,32 @@ public class DetailsActivity extends AppCompatActivity {
 
             pbLoading.setVisibility(View.GONE);
             vpContent.setVisibility(View.VISIBLE);
-
-            HashMap<String, Word> params = (HashMap<String, Word>) intent.getSerializableExtra("map");
             tvWord.setText(palabra.toUpperCase());
 
-            final Word palabra = params.get("palabra");
-
-            int totalPages = palabra.getModos().size();
+            int totalPages = word.getModos().size();
             ArrayList<FragmentModo> fragments = new ArrayList<>();
             for(int i = 0; i < totalPages; i++) {
-                fragments.add(new FragmentModo(palabra.getModos().get(i)));
+                fragments.add(new FragmentModo(word.getModos().get(i)));
             }
 
             VerbsPageAdapter verbsPageAdapter = new VerbsPageAdapter(getSupportFragmentManager(), fragments);
             vpContent.setAdapter(verbsPageAdapter);
 
-            if (palabra.getEjemplo() == null) {
+            if (word.getEjemplo() == null) {
 //                Toast.makeText(context, "No hay ejemplos", Toast.LENGTH_SHORT).show();
                 //No hay ejemplos
             } else {
                 clEjemplos.setVisibility(View.VISIBLE);
 
-                // Un ejemplo en espanol
-                tvEjemploEs.setText(palabra.getEjemplo().getEjemplosEs().get(0));
-                tvEjemploNl.setText(palabra.getEjemplo().getEjemplosNl().get(0));
-
-                // Varios ejemplos en espanol
+                tvEjemploEs.setText(word.getEjemplo().getEjemplosEs().get(0));
+                tvEjemploNl.setText(word.getEjemplo().getEjemplosNl().get(0));
 
                 clEjemplos.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        indexVerb = indexVerb + 1 == palabra.getEjemplo().getEjemplosEs().size() ? 0 : indexVerb + 1;
-                        tvEjemploEs.setText(palabra.getEjemplo().getEjemplosEs().get(indexVerb));
-                        tvEjemploNl.setText(palabra.getEjemplo().getEjemplosNl().get(indexVerb));
+                        indexVerb = indexVerb + 1 == word.getEjemplo().getEjemplosEs().size() ? 0 : indexVerb + 1;
+                        tvEjemploEs.setText(word.getEjemplo().getEjemplosEs().get(indexVerb));
+                        tvEjemploNl.setText(word.getEjemplo().getEjemplosNl().get(indexVerb));
 
                     }
                 });
@@ -223,7 +228,7 @@ public class DetailsActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     llError.setVisibility(View.GONE);
                     pbLoading.setVisibility(View.VISIBLE);
-                    API.getResultados(Common.getContext(), palabraId, palabra.trim().toLowerCase());
+                    API.getResultados(Common.context, palabra.trim().toLowerCase());
                 }
             });
 
